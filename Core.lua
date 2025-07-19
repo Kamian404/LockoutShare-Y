@@ -388,53 +388,57 @@ function LSY:UI_ERROR_MESSAGE(_, errorType)
     end
 end
 
--- Check the user zone and set the specific difficulty
+-- Check the user's current zone and determine the appropriate instance settings
 function LSY:CheckUserLocation()
     local userZoneId = C_Map.GetBestMapForUnit("party1")
     local userFaction = UnitFactionGroup("party1")
     self.sharinguser = UnitName("party1")
-    
-    for key, data in pairs(InstanceData) do
-        for _, zoneId in ipairs(data.zoneId) do
 
-            if zoneId == userZoneId then
-                
-                -- Check if the raid is faction specific
-                if data.factionSpecific then
-                    if userFaction == self.playerfaction then
-                        self.RaidDifficulty = data.difficultyId
-                        self.RaidForMsg = data.displayName
-                        return true
+    for key, instance in pairs(InstanceData) do
+        -- Only continue if this instance is enabled in the addon settings
+        if self.db[key] then
+            for _, zoneId in ipairs(instance.zoneId) do
+                if zoneId == userZoneId then
+
+                    -- Handle faction-specific instances
+                    if instance.factionSpecific then
+                        if userFaction == self.playerfaction then
+                            self.RaidDifficulty = instance.difficultyId
+                            self.RaidForMsg = instance.displayName
+                            return true
+                        else
+                            self:SendMessage(L["FACTIONSPECIFIC"], 'CHECK')
+                            C_Timer.After(1, function() C_PartyInfo.LeaveParty() end)
+                            return false
+                        end
+
+                    -- Handle non-faction-specific instances
                     else
-                        self:SendMessage(L["FACTIONSPECIFIC"], 'CHECK')
-                        C_Timer.After(1,function() C_PartyInfo.LeaveParty()end)
-                        return false
-                    end
-                else
-                    -- all others
-                    if data.category == "raid" then
-                        self.RaidDifficulty = data.difficultyId
-                        self.RaidForMsg = data.displayName
-                        return true
-                    elseif data.category == "dungeon" then
-                        self.DungeonDifficulty = data.difficultyId
-                        self.RaidForMsg = data.displayName
+                        if instance.category == "raid" then
+                            self.RaidDifficulty = instance.difficultyId
+                        elseif instance.category == "dungeon" then
+                            self.DungeonDifficulty = instance.difficultyId
+                        end
+                        self.RaidForMsg = instance.displayName
                         return true
                     end
                 end
             end
         end
     end
-    -- Falls nichts gefunden wurde
+
+    -- If no valid instance was found for the current zone
     self:SendMessage("Your current location doesn't have available instances for sharing", 'CHECK')
-    C_Timer.After(1,function() C_PartyInfo.LeaveParty()end)
+    C_Timer.After(1, function() C_PartyInfo.LeaveParty() end)
     return false
 end
+
 
 
 -- invite player, STATUS_IDLE -> STATUS_INVITING when queue
 function LSY:Invite(name)
     self:DebugPrint("Inviting %s to party", name)
+    self:SendMessage(L["InviteMessage"], "WHISPER", name)
 
     C_PartyInfo_ConfirmLeaveParty()
     ResetInstances()
@@ -467,6 +471,9 @@ function LSY:ConfirmInvite()
             self:SendMessage(L["WelcomeMsg2"], 'CHECK')
             self:SendMessage(L["WelcomeMsg3"], 'CHECK')
             self:SendMessage(L["WelcomeMsg4"], 'CHECK')
+            C_Timer.After(1, function()
+                self:SendMessage(L["DifficultyInfo"], 'CHECK')
+            end)
         else
             return
         end
@@ -604,7 +611,9 @@ function LSY:QueuePush(name)
     local playerIndex = self:QueueQuery(name)
     if not playerIndex then
         tinsert(self.queue, name)
-        self:SendMessage(self.db.EnterQueueMsg, 'WHISPER', name, #self.queue)
+        if UnitInParty("player") then
+            self:SendMessage(self.db.EnterQueueMsg, 'WHISPER', name, #self.queue)
+        end
     else
         self:SendMessage(self.db.QueryQueueMsg, 'WHISPER', name, playerIndex)
     end
@@ -645,13 +654,13 @@ function LSY:RecvChatMessage(text)
         return C_PartyInfo_ConvertToParty()
     end
 
-    if string.upper(text) == "!HEROIC" then
+    if string.upper(text) == "!HEROIC" or string.upper(text) == "!HC" then
         SetRaidDifficultyID(15)
         self:SendMessage("Instance difficulty has been changed to heroic", 'CHECK')
         self:SendMessage("You can write '!normal' to change it back to normal difficulty", 'CHECK')
     end
 
-    if string.upper(text) == "!NORMAL" then
+    if string.upper(text) == "!NORMAL" or string.upper(text) == "!NM" then
         SetRaidDifficultyID(14)
         self:SendMessage("Instance difficulty has been changed to normal", 'CHECK')
     end

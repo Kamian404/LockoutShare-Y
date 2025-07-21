@@ -395,10 +395,10 @@ LSY.Options.args.Instances = BuildInstanceOptions()
 function C:OnEnable()
     LSY.Options.args.Profiles = LibStub('AceDBOptions-3.0'):GetOptionsTable(LSY.data)
 
-    AceConfig:RegisterOptionsTable('LockoutShare-Yrna', LSY.Options, 'fis')
-    local _, configFrameName = AceConfigDialog:AddToBlizOptions('LockoutShare-Yrna', L["LockoutShare-Yrna"], nil, 'General')
-    AceConfigDialog:AddToBlizOptions('LockoutShare-Yrna', L["Notify Message"], L["LockoutShare-Yrna"], 'Message')
-    AceConfigDialog:AddToBlizOptions('LockoutShare-Yrna', L["Instances"], L["LockoutShare-Yrna"], 'Instances')
+    AceConfig:RegisterOptionsTable('LockoutShare-Y', LSY.Options, 'fis')
+    local _, configFrameName = AceConfigDialog:AddToBlizOptions('LockoutShare-Y', L["LockoutShare-Y"], nil, 'General')
+    AceConfigDialog:AddToBlizOptions('LockoutShare-Y', L["Notify Message"], L["LockoutShare-Y"], 'Message')
+    AceConfigDialog:AddToBlizOptions('LockoutShare-Y', L["Instances"], L["LockoutShare-Y"], 'Instances')
 
     self.configFrameName = configFrameName
 end

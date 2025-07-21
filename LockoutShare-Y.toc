@@ -1,11 +1,11 @@
 ## Interface: 110100
-## Title: |cff1572cfLockout Share Yrna|r
+## Title: |cff1572cfLockout Share Y|r
 ## Notes: Share your Lockout-IDs to others!
 ## Author: Kamian
 ## Version: v1.0.0
-## SavedVariables: LockoutShareYrnaDB
+## SavedVariables: LockoutShareYDB
 ## SavedVariablesPerCharacter: LSYConfig
-## IconTexture: Interface\AddOns\LockoutShare-Yrna\Icon.png
+## IconTexture: Interface\AddOns\LockoutShare-Y\Icon.png
 
 Libs\Libs.xml
 
@@ -14,5 +14,6 @@ Locales\Locales.xml
 Defaults.lua
 
 InstanceData.lua
+Visual.lua
 Core.lua
 Config.lua

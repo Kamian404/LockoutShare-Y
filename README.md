@@ -1,1 +1,1 @@
-LSY - Lockout Share Yrna
+LSY - Lockout Share Y

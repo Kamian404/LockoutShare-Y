@@ -63,127 +63,29 @@ local STATUS_INVITING = 2
 local STATUS_INVITED  = 3
 local STATUS_LEAVING  = 4
 
-LSY.supportedInstances = {
-    -- Raid
-    -- Vanilla
-    [531] = { -- Temple of Ahn'Qiraj
-        [ACHIEVEMENTFRAME_FILTER_ALL .. ' ' .. BOSS_DEAD] = { low = 365, high = 511, diff = {14} }, -- ALL KILLED
-    },
-    -- The Burning Crusade
-    [564] = { -- Black Temple
-        [9] = { low = 255, high = 255, diff = {14} }, -- Illidan Stormrage
-    },
-    -- Wrath of the Lich King
-    [603] = { -- Ulduar
-        [16] = { low = 2494, high = 122879, diff = {14} }, -- Yogg-Saron
-    },
-    [631] = { -- Icecrown Citadel
-        [12] = { low = 2039, high = 2047, diff = {3, 4, 5, 6} }, -- The Lich King
-    },
-    -- Cataclysm
-    [669] = { -- Blackwing Descent
-        [6] = { low = 47, high = 47, diff = {3, 4, 5, 6} }, -- Nefarian and Onyxia
-    },
-    [720] = { -- Firelands
-        [4] = { low = 54, high = 54, diff = {14, 15} }, -- Alysrazor
-        [6] = { low = 118, high = 118, diff = {14, 15} }, -- Majordomo Staghelm
-        [7] = { low = 119, high = 119, diff = {14} }, -- Ragnaros
-    },
-    [754] = { -- Throne of the Four Winds
-        [2] = { low = 2, high = 2, diff = {3, 4, 5, 6} }, -- Al'Akir
-    },
-    [967] = { -- Dragon Soul
-        [5] = { low = 30, high = 30, diff = {3, 4, 5, 6} }, -- Ultraxion
-        [8] = { low = 127, high = 127, diff = {3, 4} }, -- Madness of Deathwing
-    },
-    -- Mists of Pandaria
-    [996] = { -- Terrace of Endless Spring
-        [4] = { low = 13, high = 13, diff = {3, 4, 5, 6} }, -- Sha of Fear
-    },
-    [1008] = { -- Mogu'shan Vaults
-        [5] = { low = 27, high = 27, diff = {3, 4, 5, 6} }, -- Elegon
-    },
-    [1098] = { -- Throne of Thunder
-        [2] = { low = 512, high = 512, diff = {3, 4, 5, 6} }, -- Horridon
-        [6] = { low = 1676, high = 1676, diff = {3, 4, 5, 6} }, -- Ji-Kun
-    },
-    [1136] = { -- Siege of Orgrimmar
-        [5]  = { low = 17032, high = 17032, diff = {14, 15} }, -- Galakras
-        [12] = { low = 23468, high = 23486, diff = {14, 15} }, -- Siegecrafter Blackfuse
-        [14] = { low = 23551, high = 23551, diff = {15} }, -- Garrosh Hellscream
-    },
-    -- Warlords of Draenor
-    [1205] = { -- Blackrock Foundry
-        [10] = { low = 767, high = 767, diff = {14, 15} }, -- Blackhand
-    },
-    [1448] = { -- Hellfire Citadel
-        [5] = { low = 1042, high = 1106, diff = {14, 15} }, -- Kilrogg Deadeye
-    },
-    -- Legion
-    [1520] = { -- The Emerald Nightmare
-        [7] = { low = 119, high = 119, diff = {14, 15} }, -- Xavius
-    },
-    [1530] = { -- The Nighthold
-        [10] = { low = 258, high = 991, diff = {14, 15} }, -- Gul'dan
-    },
-    [1676] = { -- Tomb of Sargeras
-        [5] = { low = 3, high = 51, diff = {14, 15} }, -- Mistress Sassz'ine
-    },
-    [1712] = { -- Antorus, the Burning Throne
-        [2] = { low = 128, high = 2015, diff = {14, 15} }, -- Felhounds of Sargeras
-    },
-    -- Battle for Azeroth
-    [1861] = { -- Uldir
-        [7] = { low = 246, high = 246, diff = {14, 15} }, -- Mythrax
-    },
-    [2070] = { -- Battle of Dazar'alor
-        [7] = { low = 863, high = 863, diff = {14, 15} }, -- High Tinker Mekkatorque
-    },
-    -- Shadowlands
-    [2450] = { -- Sanctum of Domination
-        [3] = { low = 66, high = 66, diff = {14, 15} }, -- The Nine
-    },
-    -- Dragonflight
-    [2522] = { -- Vault of the Incarnates
-        [8] = { low = 239, high = 239, diff = {14, 15} }, -- Raszageth the Storm-Eater
-    },
-    [2569] = { -- Aberrus, the Shadowed Crucible
-        [9] = { low = 495, high = 495, diff = {14, 15} }, -- Scalecommander Sarkareth
-    },
-    [2549] = { -- Amirdrassil, the Dream's Hope
-        [9] = { low = 510, high = 510, diff = {14, 15} }, -- Fyrakk the Blazing
-    },
+LSY.supportedInstances = {}
 
-    -- Dungeon
-    -- Legion
-    [1651] = { -- Return to Karazhan
-        [4] = { low = 2, high = 51, diff = {23} }, -- Attumen the Huntsman
-    },
-    -- Battle for Azeroth
-    [1754] = { -- Freehold
-        [4] = { low = 7, high = 7, diff = {23} }, -- Harlan Sweete
-    },
-    [1762] = { -- Kings' Rest
-        [4] = { low = 7, high = 7, diff = {23} }, -- King Dazar
-    },
-    [1841] = { -- The Underrot
-        [4] = { low = 7, high = 7, diff = {23} }, -- Unbound Abomination
-    },
-    [2097] = { -- Operation: Mechagon
-        [4] = { low = 208, high = 208, diff = {23} }, -- HK-8 Aerial Oppression Unit
-    },
-    -- Shadowlands
-    [2286] = { -- The Necrotic Wake
-        [4] = { low = 7, high = 7, diff = {23} }, -- Nalthor the Rimebinder
-    },
-    [2441] = { -- Tazavesh, the Veiled Market
-        [4] = { low = 127, high = 127, diff = {23} }, -- So'leah
-    },
-    -- Dragonflight
-    [2579] = { -- Dawn of the Infinite
-        [8] = { low = 127, high = 127, diff = {23} }, -- Chrono-Lord Deios
-    },
-}
+function LSY:BuildSupportedInstances()
+    self.supportedInstances = {}
+
+    for key, data in pairs(InstanceData) do
+        if self.db[key] and data.instanceId then -- only active instances
+            local diff = data.difficultyId
+            if type(diff) ~= "table" then
+                diff = { diff }
+            end
+
+            -- Wenn 14 dabei, dann auch 15 hinzufügen
+            if tContains(diff, 14) and not tContains(diff, 15) then
+                table.insert(diff, 15)
+            end
+
+            self.supportedInstances[data.instanceId] = {
+                difficulty = diff
+            }
+        end
+    end
+end
 
 -- print current status and config to chatframe
 function LSY:PrintStatus()
@@ -213,6 +115,7 @@ function LSY:SendMessage(text, chatType, channel, currIndex)
     text = gsub(text, 'QCURR', currIndex or 0)
     text = gsub(text, 'QLEN', #self.queue)
     text = gsub(text, 'MTIME', self.db.TimeLimit == 0 and UNLIMITED or self.db.TimeLimit)
+    text = gsub(text, 'TIMELEFT', GetTime() - self.invitedTime)
     text = gsub(text, 'NAME', self.playerFullName)
     text = gsub(text, 'SHARINGUSER', self.sharinguser)
     text = gsub(text, 'SUPINSTANCE', self.RaidForMsg)
@@ -256,6 +159,8 @@ function LSY:Initialize()
     self.queue = {}
 
     if self.db.Enable then
+        LSY:CreateSharesFrame()
+        LSY.sharesFrame:Show()
         self:RegisterEvent('UPDATE_INSTANCE_INFO')
         self:RegisterBucketEvent('PLAYER_ENTERING_WORLD', 1, RequestRaidInfo)
         RequestRaidInfo()
@@ -276,9 +181,9 @@ function LSY:Update()
     self:UnregisterAllEvents()
     if not self.db.Enable then return end
 
-    self:RegisterEvent('UPDATE_INSTANCE_INFO')
     self:RegisterEvent('PARTY_INVITE_REQUEST')
     self:RegisterEvent('CHAT_MSG_SYSTEM')
+    self:RegisterEvent('LFG_LIST_ACTIVE_ENTRY_UPDATE')
 
     if self.db.DNDMessage then
         self:UpdateDNDMessage()
@@ -307,36 +212,25 @@ function LSY:ReleaseAndUpdate()
 end
 
 function LSY:UPDATE_INSTANCE_INFO()
+    self:BuildSupportedInstances()
     if not self.db.Enable then return end
 
     if self.db.AutoExtend then
         for i = 1, GetNumSavedInstances() do
             local _, _, _, difficulty, _, extended = GetSavedInstanceInfo(i)
-            -- Thanks to SavedInstances
             local link = GetSavedInstanceChatLink(i)
             ---@cast link string
-            local instanceID, bossList = strmatch(link, ':(%d+):%d+:(%d+)\124h')
-            instanceID = tonumber(instanceID)
-            bossList = tonumber(bossList)
-            ---@cast bossList number
-            if not extended and self.supportedInstances[instanceID] then
-                local corrupted
-                for _, data in pairs(self.supportedInstances[instanceID]) do
-                    if tContains(data.diff, difficulty) then
-                        if bit_band(bossList, data.low) == data.low and bit_bor(bossList, data.high) == data.high then
-                            SetSavedInstanceExtend(i, true)
-                            corrupted = nil
-                            break
-                        else
-                            -- difficulty match & progress not match
-                            corrupted = true
-                        end
-                    end
-                end
 
-                if corrupted then
-                    -- corrupted lockout
-                    LSY:PrintMessage(L["Detected corrupted lockout %s, skip auto extend."], link)
+            -- Extract InstanceID from chat link
+            local instanceID = tonumber(strmatch(link, ':(%d+):%d+:%d+%|h'))
+
+            -- check if supported and not yet extended
+            if instanceID and not extended and self.supportedInstances[instanceID] then
+                local allowedDifficulties = self.supportedInstances[instanceID].difficulty
+
+                if allowedDifficulties and tContains(allowedDifficulties, difficulty) then
+                    SetSavedInstanceExtend(i, true)
+                    LSY:PrintMessage(L["Verlängere Instance %s."], link)
                 end
             end
         end
@@ -405,6 +299,7 @@ function LSY:CheckUserLocation()
                         if userFaction == self.playerfaction then
                             self.RaidDifficulty = instance.difficultyId
                             self.RaidForMsg = instance.displayName
+                            LSY:UpdateCounterAndList(instance.displayName)
                             return true
                         else
                             self:SendMessage(L["FACTIONSPECIFIC"], 'CHECK')
@@ -414,6 +309,7 @@ function LSY:CheckUserLocation()
 
                     -- Handle non-faction-specific instances
                     else
+                        LSY:UpdateCounterAndList(instance.displayName)
                         if instance.category == "raid" then
                             self.RaidDifficulty = instance.difficultyId
                         elseif instance.category == "dungeon" then
@@ -433,6 +329,33 @@ function LSY:CheckUserLocation()
     return false
 end
 
+function LSY:UpdateCounterAndList(name)
+
+    LSY:AddOrUpdateInstanceCount(name)
+    self.db.totalCount = (self.db.totalCount or 0) + 1
+    LSY.totalCount = self.db.totalCount
+    LSY.todayCount = (LSY.todayCount or 0) + 1
+    LSY.lastShared = date(name)
+    LSY:UpdateSharesFrame()
+end
+
+function LSY:AddOrUpdateInstanceCount(name)
+    if not self.lockouts then self.lockouts = {} end
+
+    for i, value in ipairs(self.lockouts) do
+        -- Extrahiere Zählung, falls vorhanden (z. B. "3x Black Temple")
+        local count, baseStr = value:match("^(%d+)x (.+)$")
+        if baseStr == name or value == name then
+            count = tonumber(count) or 1
+            count = count + 1
+            self.lockouts[i] = count .. "x " .. name
+            return
+        end
+    end
+
+    -- Noch nicht vorhanden? Dann neu einfügen
+    table.insert(self.lockouts, "1x " .. name)
+end
 
 
 -- invite player, STATUS_IDLE -> STATUS_INVITING when queue
@@ -463,6 +386,7 @@ function LSY:ConfirmInvite()
     self.status = STATUS_INVITED
     self.invitedTime = GetTime()
     self.pendingInvite = nil
+    self.playerWantsLead = false
 
     -- check where the player is and if we support his location
     C_Timer.After(2, function()
@@ -484,6 +408,7 @@ end
 function LSY:Leave(leaveMsg)
     self:UnregisterEvent('CHAT_MSG_PARTY')
     self:UnregisterEvent('CHAT_MSG_RAID')
+    self:UnregisterEvent('LFG_LIST_ACTIVE_ENTRY_UPDATE')
     self:RegisterEvent('CHAT_MSG_PARTY_LEADER', 'Release')
     self:RegisterEvent('CHAT_MSG_RAID_LEADER', 'Release')
 
@@ -550,13 +475,27 @@ function LSY:FetchUpdate()
             return
         end
 
-        -- check player place
-        if self.db.AutoLeave then
-            local instanceID = select(4, UnitPosition('party1'))
-            if instanceID and self.supportedInstances[instanceID] then
-                self:DebugPrint("Leaving party: Player entered instance %d", instanceID)
-                self:Leave(self.db['AutoLeaveMsg' .. instanceID] or self.db.AutoLeaveMsg)
-                return
+        -- check player place and if he wants lead, we give him lead and 10 more seconds
+        if self.playerWantsLead then
+            if UnitIsGroupLeader('player') then
+                local instanceID = select(4, UnitPosition('party1'))
+                if instanceID and self.supportedInstances[instanceID] then
+                    self.invitedTime = self.invitedTime + 10
+                    self:SendMessage(L["HINT_LEAD"], 'CHECK')
+                    self:DebugPrint("Promote Player to lead, he entered instance %d", instanceID)
+                    if GetNumGroupMembers() > 1 then
+                        PromoteToLeader('party1')
+                    end
+                end
+            end
+        else
+            if self.db.AutoLeave then
+                local instanceID = select(4, UnitPosition('party1'))
+                if instanceID and self.supportedInstances[instanceID] then
+                    self:DebugPrint("Leaving party: Player entered instance %d", instanceID)
+                    self:Leave(self.db['AutoLeaveMsg' .. instanceID] or self.db.AutoLeaveMsg)
+                    return
+                end
             end
         end
     elseif self.status == STATUS_LEAVING then
@@ -654,15 +593,21 @@ function LSY:RecvChatMessage(text)
         return C_PartyInfo_ConvertToParty()
     end
 
+    if string.upper(text) == "!LEAD" then
+        self.playerWantsLead = true
+        self:SendMessage(L["COMMAND_LEAD"], 'CHECK')
+    end
+
     if string.upper(text) == "!HEROIC" or string.upper(text) == "!HC" then
         SetRaidDifficultyID(15)
-        self:SendMessage("Instance difficulty has been changed to heroic", 'CHECK')
-        self:SendMessage("You can write '!normal' to change it back to normal difficulty", 'CHECK')
+        self:SendMessage(L["COMMAND_HEROIC"], 'CHECK')
+        self:SendMessage(L["HINT_HEROIC"], 'CHECK')
     end
 
     if string.upper(text) == "!NORMAL" or string.upper(text) == "!NM" then
         SetRaidDifficultyID(14)
-        self:SendMessage("Instance difficulty has been changed to normal", 'CHECK')
+        self:SendMessage(L["COMMAND_NORMAL"], 'CHECK')
+        self:SendMessage(L["HINT_NORMAL"], 'CHECK')
     end
     
     self:SendMessage("", 'CHECK')
@@ -678,6 +623,11 @@ function LSY:CHAT_MSG_RAID(_, text, playerName)
     self:DebugPrint("Received raid message '%s' from %s", text, playerName)
 
     self:RecvChatMessage(text)
+end
+
+function LSY:LFG_LIST_ACTIVE_ENTRY_UPDATE(_)
+    self:SendMessage(L["HINT_LFG"], 'CHECK')
+    return self:Leave(self.db.AutoLeaveMsg)
 end
 
 do

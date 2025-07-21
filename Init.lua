@@ -23,7 +23,7 @@ LSY.DF = {
 }
 
 LSY.Options = {
-    name = L["LockoutShare-Yrna"],
+    name = L["LockoutShare-Y"],
     type = 'group',
     args = {}
 }
@@ -42,10 +42,11 @@ LSY.playerGUID = UnitGUID('player')
 LSY.sharinguser = ""
 LSY.RaidForMsg = ""
 LSY.playerfaction = UnitFactionGroup("player")
+LSY.invitedTime = 0
 
 function LSY:OnEnable()
     -- Initialize the database with AceDB-3.0, using default tables and default profile enabled
-    self.data = LibStub('AceDB-3.0'):New('LockoutShareYrnaDB', self.DF, true)
+    self.data = LibStub('AceDB-3.0'):New('LockoutShareYDB', self.DF, true)
 
     -- Migrate legacy data from FISConfig if present
     if FISConfig and FISConfig.DBVer == 2 then

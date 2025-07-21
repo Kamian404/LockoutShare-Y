@@ -1,6 +1,6 @@
 local LSY, L, P, G = unpack((select(2, ...)))
-
 -- Lua functions
+_G["LSY"] = LSY
 local _G = _G
 local bit_band, bit_bor, format, gsub, ipairs, pairs, select = bit.band, bit.bor, format, gsub, ipairs, pairs, select
 local strfind, strlower, strmatch, tinsert, tonumber, tremove = strfind, strlower, strmatch, tinsert, tonumber, tremove
@@ -335,7 +335,7 @@ function LSY:UpdateCounterAndList(name)
     self.db.totalCount = (self.db.totalCount or 0) + 1
     LSY.totalCount = self.db.totalCount
     LSY.todayCount = (LSY.todayCount or 0) + 1
-    LSY.lastShared = date(name)
+    LSY.lastShared = name
     LSY:UpdateSharesFrame()
 end
 

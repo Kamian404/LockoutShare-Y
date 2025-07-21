@@ -1,4 +1,5 @@
 local LSY, L, P, G = unpack((select(2, ...)))
+
 function LSY:CreateSharesFrame()
     if self.sharesFrame then
         self:UpdateSharesFrame()
@@ -15,39 +16,82 @@ function LSY:CreateSharesFrame()
     frame:SetScript("OnDragStart", frame.StartMoving)
     frame:SetScript("OnDragStop", frame.StopMovingOrSizing)
 
-    -- Title: "Shares"
+    -- Title: "LockoutShare-Y"
     frame.title = frame:CreateFontString(nil, "OVERLAY", "GameFontHighlightLarge")
-    frame.title:SetPoint("TOP", 0, -10)
-    frame.title:SetText("Shares")
+    frame.title:SetPoint("TOP", 0, -5)
+    frame.title:SetText("LockoutShare-Y")
 
-    -- Total and Today
+    -- Total and Today (immer sichtbar)
     frame.totalText = frame:CreateFontString(nil, "OVERLAY", "GameFontNormal")
     frame.totalText:SetPoint("TOPLEFT", 15, -35)
 
     frame.todayText = frame:CreateFontString(nil, "OVERLAY", "GameFontNormal")
     frame.todayText:SetPoint("TOPRIGHT", -15, -35)
 
-    -- ScrollFrame für Lockouts
-    local scrollFrame = CreateFrame("ScrollFrame", nil, frame, "UIPanelScrollFrameTemplate")
-    scrollFrame:SetPoint("TOPLEFT", 15, -60)
-    scrollFrame:SetPoint("BOTTOMRIGHT", -35, 40)
+    -- Container für einklappbaren Content (ScrollFrame + Instanzliste)
+    local contentContainer = CreateFrame("Frame", nil, frame)
+    contentContainer:SetPoint("TOPLEFT", 15, -60)
+    contentContainer:SetPoint("BOTTOMRIGHT", -35, 40)
+    frame.contentContainer = contentContainer
 
+    -- ScrollFrame im Container
+    local scrollFrame = CreateFrame("ScrollFrame", nil, contentContainer, "UIPanelScrollFrameTemplate")
+    scrollFrame:SetAllPoints()
+    frame.scrollFrame = scrollFrame
+
+    -- Content Frame als ScrollChild
     local content = CreateFrame("Frame", nil, scrollFrame)
     scrollFrame:SetScrollChild(content)
-    content:SetSize(1, 1) -- Placeholder size
-
+    content:SetSize(1, 1) -- Platzhalter, wird dynamisch erweitert
     frame.content = content
+
     frame.entries = {}
 
-    -- Last shared
+    -- Last shared (immer sichtbar)
     frame.lastSharedText = frame:CreateFontString(nil, "OVERLAY", "GameFontNormal")
     frame.lastSharedText:SetPoint("BOTTOMLEFT", 15, 15)
 
+    -- Toggle Button für einklappen
+    local toggleButton = CreateFrame("Button", nil, frame)
+    toggleButton:SetSize(24, 24)
+    toggleButton:SetPoint("TOPLEFT", 0, 1)
+    frame.toggleButton = toggleButton
+
+   -- Texturen für + und - Symbol
+    local plusTex = toggleButton:CreateTexture(nil, "OVERLAY")
+    plusTex:SetSize(18, 18)
+    plusTex:SetPoint("CENTER")
+    plusTex:SetTexture("Interface\\Buttons\\UI-PlusButton-UP") -- Plus-Icon
+
+    local minusTex = toggleButton:CreateTexture(nil, "OVERLAY")
+    minusTex:SetSize(18, 18)
+    minusTex:SetPoint("CENTER")
+    minusTex:SetTexture("Interface\\Buttons\\UI-MinusButton-UP") -- Minus-Icon
+
+    -- Initial: Content sichtbar -> Minus sichtbar, Plus versteckt
+    plusTex:Hide()
+    minusTex:Show()
+
+    toggleButton:SetScript("OnClick", function()
+        if contentContainer:IsShown() then
+            contentContainer:Hide()
+            plusTex:Show()
+            minusTex:Hide()
+            frame:SetHeight(80)  -- Höhe für Titel + Total/Today + Last shared
+        else
+            contentContainer:Show()
+            plusTex:Hide()
+            minusTex:Show()
+            frame:SetHeight(420) -- volle Höhe mit Inhalt
+        end
+    end)
+
     self.sharesFrame = frame
 
-    -- Inhalte anzeigen
     self:UpdateSharesFrame()
 end
+
+
 
 function LSY:UpdateSharesFrame()
     local frame = self.sharesFrame

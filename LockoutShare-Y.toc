@@ -6,6 +6,7 @@
 ## SavedVariables: LockoutShareYDB
 ## SavedVariablesPerCharacter: LSYConfig
 ## IconTexture: Interface\AddOns\LockoutShare-Y\Icon.png
+# Based on: Free Instance Sharer by LiangYuxuan (MIT License)
 
 Libs\Libs.xml
 

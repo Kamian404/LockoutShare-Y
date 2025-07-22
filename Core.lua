@@ -593,6 +593,14 @@ function LSY:RecvChatMessage(text)
         return C_PartyInfo_ConvertToParty()
     end
 
+    if string.upper(text) == "!INFO" then
+        self:SendMessage(L["ADDON_INFO"], 'CHECK')
+    end
+
+    if string.upper(text) == "!TIP" then
+        self:SendMessage(L["COMMAND_TIP"], 'CHECK')
+    end
+
     if string.upper(text) == "!LEAD" then
         self.playerWantsLead = true
         self:SendMessage(L["COMMAND_LEAD"], 'CHECK')
@@ -604,7 +612,7 @@ function LSY:RecvChatMessage(text)
         self:SendMessage(L["HINT_HEROIC"], 'CHECK')
     end
 
-    if string.upper(text) == "!NORMAL" or string.upper(text) == "!NM" then
+    if string.upper(text) == "!NORMAL" or string.upper(text) == "!NHC" then
         SetRaidDifficultyID(14)
         self:SendMessage(L["COMMAND_NORMAL"], 'CHECK')
         self:SendMessage(L["HINT_NORMAL"], 'CHECK')

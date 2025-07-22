@@ -65,3 +65,5 @@ L["HINT_HEROIC"] = "You can write '!normal' to change it back to normal difficul
 L["COMMAND_NORMAL"] = "Instance difficulty has been changed to heroic."
 L["HINT_NORMAL"] = "Instance difficulty has been changed to normal."
 L["HINT_LFG"] = "Group listed in LFG."
+L["ADDON_INFO"] = "This is an Addon, created by Kamian (Yrna-Antonidas)"
+L["COMMAND_TIP"] = "Tips are not necessary, but welcome. You can mail it to me via. Warbank to NAME"

@@ -184,7 +184,6 @@ function LSY:Update()
     self:RegisterEvent('UPDATE_INSTANCE_INFO')
     self:RegisterEvent('PARTY_INVITE_REQUEST')
     self:RegisterEvent('CHAT_MSG_SYSTEM')
-    self:RegisterEvent('LFG_LIST_ACTIVE_ENTRY_UPDATE')
 
     if self.db.DNDMessage then
         self:UpdateDNDMessage()
@@ -298,19 +297,14 @@ function LSY:CheckUserLocation()
                     -- Handle faction-specific instances
                     if instance.factionSpecific then
                         if userFaction == self.playerfaction then
-                            if userZoneId == 118 then
-                                self:SendMessage("You need to have the first boss already killed on 25 Heroic.", 'CHECK')
-                                self:SendMessage("Kill Blood Queen boss only, then leave ICC.", 'CHECK')
-                                self:SendMessage("Then re-enter and go straight to Lich King.", 'CHECK')
-                            end
                             self.RaidDifficulty = instance.difficultyId
                             self.RaidForMsg = instance.displayName
                             LSY:UpdateCounterAndList(instance.displayName)
-                            return true
+                            return true, userZoneId
                         else
                             self:SendMessage(L["FACTIONSPECIFIC"], 'CHECK')
                             C_Timer.After(1, function() C_PartyInfo.LeaveParty() end)
-                            return false
+                            return false, userZoneId
                         end
 
                     -- Handle non-faction-specific instances
@@ -323,7 +317,7 @@ function LSY:CheckUserLocation()
                             self.DungeonDifficulty = instance.difficultyId
                         end
                         self.RaidForMsg = instance.displayName
-                        return true
+                        return true, userZoneId
                     end
                 end
             end
@@ -334,7 +328,7 @@ function LSY:CheckUserLocation()
     self:SendMessage(L["ZONE_UNSOPPORTED"], 'CHECK')
     self:DebugPrint("Unsupported Zone: " .. userZoneId)
     C_Timer.After(1, function() C_PartyInfo.LeaveParty() end)
-    return false
+    return false, nil
 end
 
 function LSY:UpdateCounterAndList(name)
@@ -396,6 +390,7 @@ function LSY:ConfirmInvite()
     self:RegisterEvent('CHAT_MSG_PARTY')
     self:RegisterEvent('CHAT_MSG_RAID')
     self:RegisterEvent('GROUP_INVITE_CONFIRMATION')
+    self:RegisterEvent('LFG_LIST_ACTIVE_ENTRY_UPDATE')
 
     self.status = STATUS_INVITED
     self.invitedTime = GetTime()
@@ -404,14 +399,22 @@ function LSY:ConfirmInvite()
 
     -- check where the player is and if we support his location
     C_Timer.After(2, function()
-        if LSY:CheckUserLocation() then
+        local supportedZone, userZoneID = LSY:CheckUserLocation()
+        if supportedZone then
             self:SendMessage(L["WelcomeMsg1"], 'CHECK')
             self:SendMessage(L["WelcomeMsg2"], 'CHECK')
             self:SendMessage(L["WelcomeMsg3"], 'CHECK')
             self:SendMessage(L["WelcomeMsg4"], 'CHECK')
-            C_Timer.After(1, function()
-                self:SendMessage(L["DifficultyInfo"], 'CHECK')
-            end)
+
+            if userZoneID == 118 then
+                self:SendMessage("You need to have the first boss already killed on 25 Heroic.", 'CHECK')
+                self:SendMessage("Kill Blood Queen boss only, then leave ICC.", 'CHECK')
+                self:SendMessage("Then re-enter and go straight to Lich King.", 'CHECK')
+            else
+                C_Timer.After(1, function()
+                    self:SendMessage(L["DifficultyInfo"], 'CHECK')
+                end)
+            end
         else
             return
         end

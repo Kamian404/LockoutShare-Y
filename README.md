@@ -11,7 +11,7 @@
 Lockout Sharing in World of Warcraft allows multiple characters or players to benefit from the same raid lockout.
 A player with a saved lockout can invite others to their group.
 
-## Example:
+### Example:
 If the 9th boss drops a mount, the sharer invites you to a lockout where the first 8 bosses are already killed—you join and directly kill the 9th boss.
 The host does not need to be present, making the process automatic.
  

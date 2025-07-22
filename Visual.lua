@@ -9,12 +9,21 @@ function LSY:CreateSharesFrame()
 
     local frame = CreateFrame("Frame", "LSYSharesFrame", UIParent, "BasicFrameTemplateWithInset")
     frame:SetSize(320, 420)
-    frame:SetPoint("CENTER")
+    local pos = self.db.sharesFramePos
+    if pos then
+        frame:SetPoint(pos[1], UIParent, pos[2], pos[3], pos[4])
+    else
+        frame:SetPoint("CENTER") -- Fallback
+    end
     frame:SetMovable(true)
     frame:EnableMouse(true)
     frame:RegisterForDrag("LeftButton")
     frame:SetScript("OnDragStart", frame.StartMoving)
-    frame:SetScript("OnDragStop", frame.StopMovingOrSizing)
+    frame:SetScript("OnDragStop", function(self)
+        self:StopMovingOrSizing()
+        local point, relativeTo, relativePoint, xOfs, yOfs = self:GetPoint()
+        LSY.db.sharesFramePos = { point, relativePoint, xOfs, yOfs }
+    end)
 
     -- Title: "LockoutShare-Y"
     frame.title = frame:CreateFontString(nil, "OVERLAY", "GameFontHighlightLarge")

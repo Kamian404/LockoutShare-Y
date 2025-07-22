@@ -326,7 +326,8 @@ function LSY:CheckUserLocation()
     end
 
     -- If no valid instance was found for the current zone
-    self:SendMessage(L["ZONE_UNSOPPORTED"] .. ": "  .. userZoneId, 'CHECK')
+    self:SendMessage(L["ZONE_UNSOPPORTED"], 'CHECK')
+    self:DebugPrint("Unsupported Zone: " .. userZoneId)
     C_Timer.After(1, function() C_PartyInfo.LeaveParty() end)
     return false
 end

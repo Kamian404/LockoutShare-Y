@@ -115,7 +115,7 @@ function LSY:SendMessage(text, chatType, channel, currIndex)
     text = gsub(text, 'QCURR', currIndex or 0)
     text = gsub(text, 'QLEN', #self.queue)
     text = gsub(text, 'MTIME', self.db.TimeLimit == 0 and UNLIMITED or self.db.TimeLimit)
-    text = gsub(text, 'TIMELEFT', GetTime() - self.invitedTime)
+    text = gsub(text, 'TIMELEFT', math.floor(GetTime() - self.invitedTime))
     text = gsub(text, 'NAME', self.playerFullName)
     text = gsub(text, 'SHARINGUSER', self.sharinguser)
     text = gsub(text, 'SUPINSTANCE', self.RaidForMsg)
@@ -181,6 +181,7 @@ function LSY:Update()
     self:UnregisterAllEvents()
     if not self.db.Enable then return end
 
+    self:RegisterEvent('UPDATE_INSTANCE_INFO')
     self:RegisterEvent('PARTY_INVITE_REQUEST')
     self:RegisterEvent('CHAT_MSG_SYSTEM')
     self:RegisterEvent('LFG_LIST_ACTIVE_ENTRY_UPDATE')
@@ -311,6 +312,7 @@ function LSY:CheckUserLocation()
                     else
                         LSY:UpdateCounterAndList(instance.displayName)
                         if instance.category == "raid" then
+                            C_PartyInfo_ConfirmConvertToRaid()
                             self.RaidDifficulty = instance.difficultyId
                         elseif instance.category == "dungeon" then
                             self.DungeonDifficulty = instance.difficultyId
@@ -324,7 +326,7 @@ function LSY:CheckUserLocation()
     end
 
     -- If no valid instance was found for the current zone
-    self:SendMessage("Your current location doesn't have available instances for sharing", 'CHECK')
+    self:SendMessage(L["ZONE_UNSOPPORTED"] .. ": "  .. userZoneId, 'CHECK')
     C_Timer.After(1, function() C_PartyInfo.LeaveParty() end)
     return false
 end
@@ -360,6 +362,12 @@ end
 
 -- invite player, STATUS_IDLE -> STATUS_INVITING when queue
 function LSY:Invite(name)
+    -- If DND active, dont share and response DND message
+    if self.db.DNDMessage then
+        self:UpdateDNDMessage()
+        return
+    end
+
     self:DebugPrint("Inviting %s to party", name)
     self:SendMessage(L["InviteMessage"], "WHISPER", name)
 
@@ -457,7 +465,6 @@ function LSY:FetchUpdate()
             local name = tremove(self.queue, 1)
 
             self:Invite(name)
-            self:UpdateDNDMessage()
         end
     elseif self.status == STATUS_INVITING then
         local elapsed = GetTime() - self.inviteTime
@@ -556,7 +563,6 @@ function LSY:QueuePush(name)
     else
         self:SendMessage(self.db.QueryQueueMsg, 'WHISPER', name, playerIndex)
     end
-    self:UpdateDNDMessage()
 end
 
 -- remove a player from queue
@@ -568,7 +574,6 @@ function LSY:QueuePop(name, leaveQueueMsg)
         tremove(self.queue, playerIndex)
     end
     self:SendMessage(leaveQueueMsg, 'WHISPER', name)
-    self:UpdateDNDMessage()
 end
 
 -- query a player in queue
@@ -612,10 +617,14 @@ function LSY:RecvChatMessage(text)
         self:SendMessage(L["HINT_HEROIC"], 'CHECK')
     end
 
-    if string.upper(text) == "!NORMAL" or string.upper(text) == "!NHC" then
+    if string.upper(text) == "!NORMAL" or string.upper(text) == "!NHC" or string.upper(text) == "!NM" then
         SetRaidDifficultyID(14)
         self:SendMessage(L["COMMAND_NORMAL"], 'CHECK')
         self:SendMessage(L["HINT_NORMAL"], 'CHECK')
+    end
+
+    if string.upper(text) == "!MYTHIC" then
+        self:SendMessage(L["COMMAND_MYTHIC"], 'CHECK')
     end
     
     self:SendMessage("", 'CHECK')
@@ -753,4 +762,10 @@ function LSY:GROUP_INVITE_CONFIRMATION()
     StaticPopup_Hide('GROUP_INVITE_CONFIRMATION')
 
     self:QueuePop(name)
+end
+
+
+function LSY:manipulateTotalCount(number)
+    self.db.totalCount = number
+    LSY:UpdateSharesFrame()
 end

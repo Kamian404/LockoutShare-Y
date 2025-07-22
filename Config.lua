@@ -257,7 +257,7 @@ LSY.Options.args.Message = {
         },
         DNDMsg = {
             order = 11,
-            name = L["DND Message"],
+            name = L["DND_MESSAGE"],
             type = 'input',
             width = "full",
             multiline = true,

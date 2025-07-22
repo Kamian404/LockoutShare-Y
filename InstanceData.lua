@@ -79,7 +79,7 @@ InstanceData = {
         instanceId = 2657,
         category = "raid",
         difficultyId = 14,
-        description = "Nerub-ar Palace (Normal) [Queen Ansurek]",
+        description = "Nerub-ar Palace (normal/heroic) [Queen Ansurek]",
     },
     LiberationOfUndermine = {
         order = 3.10,
@@ -88,7 +88,7 @@ InstanceData = {
         instanceId = 2769,
         category = "raid",
         difficultyId = 14,
-        description = "Liberation of Undermine (Normal/Heroic) [Gallywix]",
+        description = "Liberation of Undermine (normal/heroic) [Gallywix]",
     },
     ReturnToKarazhan = {
         order = 4.1,

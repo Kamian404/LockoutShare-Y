@@ -654,8 +654,6 @@ function LSY:RecvChatMessage(text)
     if string.upper(text) == "!MYTHIC" then
         self:SendMessage(L["COMMAND_MYTHIC"], 'CHECK')
     end
-    
-    self:SendMessage("", 'CHECK')
 end
 
 function LSY:CHAT_MSG_PARTY(_, text, playerName)

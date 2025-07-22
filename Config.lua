@@ -392,6 +392,86 @@ end
 -- Weise die dynamisch generierte Config zu
 LSY.Options.args.Instances = BuildInstanceOptions()
 
+
+LSY.Options.args.Informations = {
+    name = "About",
+    type = "group",
+    args = {
+        author = {
+            order = 1,
+            type = "description",
+            width = "full",
+            fontSize = "medium",
+            name = "|cffeda55f" .. "Autor".. ": |r" .. "Kamian (Yrni-Antonidas)",
+        },
+        support = {
+            order = 2.2,
+            type = "description",
+            width = "full",
+            fontSize = "medium",
+            name = "|cffeda55f" .. "Support" .. ": |r" .. "Yermaw-Bronzebeard",
+        },
+        version = {
+            order = 2.5,
+            type = "description",
+            width = "full",
+            fontSize = "medium",
+            name = "|cffeda55f" .. "Version" .. ": |r" .. "1.0.0",
+        },
+        header_disable_Auto = {
+            order = 3,
+            type = "header",
+            width = "full",
+            name = "Commands for YOU",
+        },
+        blank1 = {
+            order = 3.1,
+            type = "description",
+            width = "full",
+            name = " ",
+        },
+        disable_Auto = {
+            order = 3.2,
+            type = "description",
+            width = "full",
+            fontSize = "medium",
+            name = "|cffeda55f/lsy show, h |r- " .. "Show the Window" .. "\n" ..
+                "|cffeda55f/lsy dnd |r- " .. "Activates DND & stops sharing" .. "\n"
+        },
+        blank11 = {
+            order = 3.3,
+            type = "description",
+            width = "full",
+            name = " ",
+        },
+        header_help = {
+            order = 4,
+            type = "header",
+            width = "full",
+            name = "Commands for Player",
+        },
+        blank0 = {
+            order = 4.1,
+            type = "description",
+            width = "full",
+            name = " ",
+        },
+        command = {
+            order = 4.2,
+            type = "description",
+            width = "full",
+            fontSize = "medium",
+            name = "|cffeda55f!sharing, h |r- " .. "Standard command for sharing request" .. "\n" ..
+                "|cffeda55f!heroic / !hc |r- " .. "Sets the difficulty to Heroic" .. "\n" ..
+                "|cffeda55f!normal / !nhc / !nm |r- " .. "Sets the difficulty to Normal (default)" .. "\n" ..
+                "|cffeda55f!lead |r- " .. "The Player get lead after entering the Dungeon/Raid. So they can invite friends or list in LFG - They can invite Friends before entering the Instance too." .. "\n" ..
+                "|cffeda55f+ |r- " .. "This command will free you." .. "\n" ..
+                "|cffeda55f!tip |r- " .. "This will print out your Name+Realm, if someone wants to tip you." .. "\n" ..
+                "|cffeda55f!info |r- " .. "This will just whispers the Info about the Autor." .. "\n"
+        }
+    }
+}
+
 function C:OnEnable()
     LSY.Options.args.Profiles = LibStub('AceDBOptions-3.0'):GetOptionsTable(LSY.data)
 
@@ -399,6 +479,7 @@ function C:OnEnable()
     local _, configFrameName = AceConfigDialog:AddToBlizOptions('LockoutShare-Y', L["LockoutShare-Y"], nil, 'General')
     AceConfigDialog:AddToBlizOptions('LockoutShare-Y', L["Notify Message"], L["LockoutShare-Y"], 'Message')
     AceConfigDialog:AddToBlizOptions('LockoutShare-Y', L["Instances"], L["LockoutShare-Y"], 'Instances')
+    AceConfigDialog:AddToBlizOptions('LockoutShare-Y', "Informations", L["LockoutShare-Y"], 'Informations')
 
     self.configFrameName = configFrameName
 end

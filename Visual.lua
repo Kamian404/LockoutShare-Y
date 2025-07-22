@@ -97,6 +97,14 @@ function LSY:CreateSharesFrame()
 
     self.sharesFrame = frame
 
+    if ElvUI then-- Skin erst hier aufrufen, wenn das Frame existiert:
+        local E = unpack(ElvUI)
+        if E and E:GetModule("Skins") then
+            local S = E:GetModule("Skins")
+            S:HandleFrame(frame, true)  -- "true" = Transparent template
+        end
+    end
+
     self:UpdateSharesFrame()
 end
 

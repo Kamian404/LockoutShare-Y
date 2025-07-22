@@ -656,6 +656,7 @@ do
                 if lastMessageCount[sender] >= 4 then -- before increases
                     -- malicious user detected!
                     self:DebugPrint("Malicious user %s detected", sender)
+                    self:SendMessage(L["IGNORE_PLAYER"], "WHISPER", sender)
 
                     self:QueuePop(sender)
                     tinsert(self.db.Blacklist, sender)

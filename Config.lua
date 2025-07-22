@@ -14,8 +14,8 @@ local Settings_OpenToCategory = Settings.OpenToCategory
 local HideUIPanel = HideUIPanel
 local tDeleteItem = tDeleteItem
 
-local CONTINUE = CONTINUE
-local SLASH_STOPWATCH_PARAM_PAUSE1 = SLASH_STOPWATCH_PARAM_PAUSE1
+local CONTINUE = "Continue"
+local SLASH_STOPWATCH_PARAM_PAUSE1 = "Pause"
 
 -- GLOBALS: LibStub
 
@@ -61,7 +61,7 @@ LSY.Options.args.General = {
         },
         Debug = {
             order = 2,
-            name = L["Debug Mode"],
+            name = "Debug Mode",
             type = 'toggle',
         },
         Utility = {
@@ -74,13 +74,13 @@ LSY.Options.args.General = {
             args = {
                 AutoExtend = {
                     order = 12,
-                    name = L["Auto Extend Saved Instances"],
+                    name = "Auto Extend Saved Instances",
                     type = 'toggle',
                     set = function(info, value) LSY.db[info[#info]] = value; RequestRaidInfo() end,
                 },
                 DNDMessage = {
                     order = 13,
-                    name = L["Use DND Message"],
+                    name = "Use DND Message",
                     type = 'toggle',
                 },
             },
@@ -94,25 +94,25 @@ LSY.Options.args.General = {
             args = {
                 InviteOnWhisper = {
                     order = 21,
-                    name = L["Auto Invite on Whisper"],
+                    name = "Auto Invite on Whisper",
                     type = 'toggle',
                     set = function(info, value) LSY.db[info[#info]] = value; LSY:Update() end,
                 },
                 InviteOnBNWhisper = {
                     order = 22,
-                    name = L["Auto Invite on Battle.net Whisper"],
+                    name = "Auto Invite on Battle.net Whisper",
                     type = 'toggle',
                     set = function(info, value) LSY.db[info[#info]] = value; LSY:Update() end,
                 },
                 InviteOnInvited = {
                     order = 23,
-                    name = L["Auto Invite on Invited"],
+                    name = "Auto Invite on Invited",
                     type = 'toggle',
                     set = function(info, value) LSY.db[info[#info]] = value; LSY:Update() end,
                 },
                 BlacklistMaliciousUser = {
                     order = 24,
-                    name = L["Blacklist Malicious User"],
+                    name = "Blacklist Malicious User",
                     type = 'toggle',
                     disabled = function() return not LSY.db.Enable or not LSY.db.InviteOnWhisper end,
                 },
@@ -120,39 +120,39 @@ LSY.Options.args.General = {
         },
         Queue = {
             order = 30,
-            name = L["Auto Queuing"],
+            name = "Auto Queuing",
             type = 'group',
             guiInline = true,
             disabled = function() return not LSY.db.Enable or not LSY.db.AutoQueue end,
             args = {
                 AutoQueue = {
                     order = 31,
-                    name = L["Auto Queuing"],
+                    name = "Auto Queuing",
                     type = 'toggle',
                     set = function(info, value) LSY.db[info[#info]] = value; LSY:ReleaseAndUpdate() end,
                     disabled = function() return not LSY.db.Enable end,
                 },
                 LeaveQueueOnWhisper = {
                     order = 32,
-                    name = L["Leave Queue on Whisper"],
+                    name = "Leave Queue on Whisper",
                     type = 'toggle',
                 },
                 AutoLeave = {
                     order = 33,
-                    name = L["Auto Leave Party"],
+                    name = "Auto Leave Party",
                     type = 'toggle',
                 },
                 InviteTimeLimit = {
                     order = 34,
-                    name = L["Invite Time Limit (s)"],
-                    desc = L["Time limit for user to accept invitation. If set to zero, no time limit is imposed."],
+                    name = "Invite Time Limit (s)",
+                    desc = "Time limit for user to accept invitation. If set to zero, no time limit is imposed.",
                     type = 'range',
                     min = 0, max = 60, step = 1,
                 },
                 TimeLimit = {
                     order = 35,
-                    name = L["Enter Time Limit (s)"],
-                    desc = L["Time limit for user to enter instance. If set to zero, no time limit is imposed."],
+                    name = "Enter Time Limit (s)",
+                    desc = "Time limit for user to enter instance. If set to zero, no time limit is imposed.",
                     type = 'range',
                     min = 0, max = 120, step = 1,
                 },
@@ -170,31 +170,31 @@ LSY.Options.args.General = {
         },
         Message = {
             order = 40,
-            name = L["Notify Message"],
+            name = L["COMMANDS_MESSAGES"],
             type = 'group',
             guiInline = true,
             disabled = function() return not LSY.db.Enable or not LSY.db.AutoQueue end,
             args = {
                 WhisperMessage = {
                     order = 41,
-                    name = L["Whisper Message"],
+                    name = "Whisper Message",
                     type = 'toggle',
                 },
                 BNWhisperMessage = {
                     order = 42,
-                    name = L["Battle.net Whisper Message"],
+                    name = "Battle.net Whisper Message",
                     type = 'toggle',
                 },
                 GroupMessage = {
                     order = 43,
-                    name = L["Group Message"],
+                    name = "Group Message",
                     type = 'toggle',
                 },
             },
         },
         Blacklist = {
             order = 50,
-            name = L["Blacklist"],
+            name = "Blacklist",
             type = 'group',
             guiInline = true,
             disabled = function() return not LSY.db.Enable end,
@@ -235,82 +235,157 @@ LSY.Options.args.General = {
 LSY.Options.args.Message = {
     order = 2,
     type = 'group',
-    name = L["Notify Message"],
+    name = L["COMMANDS_MESSAGES"],
     confirm = true,
     get = function(info) return LSY.db[info[#info]] end,
     set = function(info, value) LSY.db[info[#info]] = value end,
     args = {
+        header_general = {
+            order = 01,
+            type = "header",
+            width = "full",
+            name = "Allowed commands",
+        },
         InviteOnWhisperMsg = {
-            order = 1,
-            name = L["Whisper Message of Auto Inviting"],
+            order = 02,
+            name = "Command for Sharing",
             type = 'input',
         },
         InviteOnBNWhisperMsg = {
-            order = 2,
-            name = L["Battle.net Whisper Message of Auto Inviting"],
+            order = 03,
+            name = "Command for Sharing for BNet",
             type = 'input',
         },
         LeaveQueueOnWhisperMsg = {
-            order = 3,
-            name = L["Whisper Message of Leaving Queue"],
+            order = 04,
+            name = "Command to Leave queue",
             type = 'input',
         },
-        DNDMsg = {
+        CommandsForNormal = {
+            order = 05,
+            name = "Normal Difficulty",
+            type = 'input',
+        },
+        CommandsForHeroic = {
+            order = 06,
+            name = "Heroic Difficulty",
+            type = 'input',
+        },
+        description_general = {
+            order = 09,
+            name = "You can enter multiple commands by deviding with ','",
+            type = 'description',
+        },
+        blank1 = {
+            order = 09.1,
+            type = "description",
+            width = "full",
+            name = " ",
+        },
+        header_welcome_message = {
+            order = 10,
+            type = "header",
+            width = "full",
+            name = "Welcome Messages",
+        },
+        WelcomeMsg1 = {
             order = 11,
-            name = L["DND_MESSAGE"],
+            name = L["WELCOME_HEADER_1"],
             type = 'input',
             width = "full",
-            multiline = true,
+        },
+        WelcomeMsg2 = {
+            order = 12,
+            name = L["WELCOME_HEADER_2"],
+            type = 'input',
+            width = "full",
+        },
+        WelcomeMsg3 = {
+            order = 13,
+            name = L["WELCOME_HEADER_3"],
+            type = 'input',
+            width = "full",
+        },
+        WelcomeMsg4 = {
+            order = 14,
+            name = L["WELCOME_HEADER_4"],
+            type = 'input',
+            width = "full",
+        },
+        description_welcome_message = {
+            order = 19.1,
+            name = "Leave it blank to not send all 4 messages",
+            type = 'description',
+        },
+        blank2 = {
+            order = 19.2,
+            type = "description",
+            width = "full",
+            name = " ",
+        },
+        header_other = {
+            order = 20,
+            type = "header",
+            width = "full",
+            name = "Other Messages",
+        },
+        DNDMsg = {
+            order = 21,
+            name = L["DND"],
+            type = 'input',
+            width = "full",
+        },
+        InviteMessageToPlayer = {
+            order = 22,
+            name = L["CONFIG_INVITE_MESSAGE"],
+            type = 'input',
+            width = "full",
         },
         EnterQueueMsg = {
-            order = 21,
+            order = 23,
             name = L["Message When Entering Queue"],
             type = 'input',
             width = "full",
-            multiline = true,
         },
         FetchErrorMsg = {
-            order = 22,
+            order = 24,
             name = L["Message When Failing to Fetch"],
             type = 'input',
             width = "full",
-            multiline = true,
         },
         QueryQueueMsg = {
-            order = 23,
+            order = 25,
             name = L["Message When Quering Queue Position"],
             type = 'input',
             width = "full",
-            multiline = true,
         },
         LeaveQueueMsg = {
-            order = 24,
+            order = 26,
             name = L["Message When Leaving Queue"],
             type = 'input',
             width = "full",
-            multiline = true,
         },
         TLELeaveMsg = {
             order = 32,
             name = L["Message Before Leaving due to Time Limit Exceeded"],
             type = 'input',
             width = "full",
-            multiline = true,
         },
         AutoLeaveMsg = {
             order = 33,
             name = L["Message Before Leaving due to player entered instance"],
             type = 'input',
             width = "full",
-            multiline = true,
         },
         TextReplace = {
             order = 91,
-            name = L["You can insert following words into the text field, and it will be replace by corresponding variables."] .. "\n" ..
-            L["QCURR - The position of the player in queue."] .. "\n" ..
-            L["QLEN - The length of the queue."] .. "\n" ..
-            L["MTIME - Time Limit to wait players to enter instance."] .. "\n" ..
-            L["NAME - The name and realm of current character."],
+            name = "You can insert following words into the text field, and it will be replace by corresponding variables." .. "\n" ..
+            "QCURR - The position of the player in queue." .. "\n" ..
+            "QLEN - The length of the queue." .. "\n" ..
+            "MTIME - Time Limit to wait players to enter instance." .. "\n" ..
+            "SUPINSTANCE - The Instance the Player stands infront of (hopefully)" .. "\n" ..
+            "SHARINGUSER - The Name of the Player." .. "\n" ..
+            "NAME - The name and realm of your own character.",
             type = 'description',
         },
     },
@@ -418,7 +493,7 @@ LSY.Options.args.Informations = {
             fontSize = "medium",
             name = "|cffeda55f" .. "Version" .. ": |r" .. "1.0.0",
         },
-        header_disable_Auto = {
+        header_commands_you = {
             order = 3,
             type = "header",
             width = "full",
@@ -430,12 +505,12 @@ LSY.Options.args.Informations = {
             width = "full",
             name = " ",
         },
-        disable_Auto = {
+        commands_you = {
             order = 3.2,
             type = "description",
             width = "full",
             fontSize = "medium",
-            name = "|cffeda55f/lsy show, h |r- " .. "Show the Window" .. "\n" ..
+            name = "|cffeda55f/lsy show |r- " .. "Show the Window" .. "\n" ..
                 "|cffeda55f/lsy dnd |r- " .. "Activates DND & stops sharing" .. "\n"
         },
         blank11 = {
@@ -444,7 +519,7 @@ LSY.Options.args.Informations = {
             width = "full",
             name = " ",
         },
-        header_help = {
+        header_commands_player = {
             order = 4,
             type = "header",
             width = "full",
@@ -456,12 +531,12 @@ LSY.Options.args.Informations = {
             width = "full",
             name = " ",
         },
-        command = {
+        commands_player = {
             order = 4.2,
             type = "description",
             width = "full",
             fontSize = "medium",
-            name = "|cffeda55f!sharing, h |r- " .. "Standard command for sharing request" .. "\n" ..
+            name = "|cffeda55f!sharing |r- " .. "Standard command for sharing request" .. "\n" ..
                 "|cffeda55f!heroic / !hc |r- " .. "Sets the difficulty to Heroic" .. "\n" ..
                 "|cffeda55f!normal / !nhc / !nm |r- " .. "Sets the difficulty to Normal (default)" .. "\n" ..
                 "|cffeda55f!lead |r- " .. "The Player get lead after entering the Dungeon/Raid. So they can invite friends or list in LFG - They can invite Friends before entering the Instance too." .. "\n" ..
@@ -477,7 +552,7 @@ function C:OnEnable()
 
     AceConfig:RegisterOptionsTable('LockoutShare-Y', LSY.Options, 'fis')
     local _, configFrameName = AceConfigDialog:AddToBlizOptions('LockoutShare-Y', L["LockoutShare-Y"], nil, 'General')
-    AceConfigDialog:AddToBlizOptions('LockoutShare-Y', L["Notify Message"], L["LockoutShare-Y"], 'Message')
+    AceConfigDialog:AddToBlizOptions('LockoutShare-Y', L["COMMANDS_MESSAGES"], L["LockoutShare-Y"], 'Message')
     AceConfigDialog:AddToBlizOptions('LockoutShare-Y', L["Instances"], L["LockoutShare-Y"], 'Instances')
     AceConfigDialog:AddToBlizOptions('LockoutShare-Y', "Informations", L["LockoutShare-Y"], 'Informations')
 

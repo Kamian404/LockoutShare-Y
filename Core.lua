@@ -48,9 +48,9 @@ local LFG_LIST_LOADING = LFG_LIST_LOADING
 local LIGHTYELLOW_FONT_COLOR_CODE = LIGHTYELLOW_FONT_COLOR_CODE
 local MARKED_AFK = MARKED_AFK
 local RED_FONT_COLOR_CODE = RED_FONT_COLOR_CODE
-local SLASH_STOPWATCH_PARAM_PAUSE1 = SLASH_STOPWATCH_PARAM_PAUSE1
-local SLASH_STOPWATCH_PARAM_STOP1 = SLASH_STOPWATCH_PARAM_STOP1
-local SOCIAL_SHARE_TEXT = SOCIAL_SHARE_TEXT
+local SLASH_STOPWATCH_PARAM_PAUSE1 = "Pause"
+local SLASH_STOPWATCH_PARAM_STOP1 = "Stop"
+local SOCIAL_SHARE_TEXT = "Share"
 local START = START
 local UNLIMITED = UNLIMITED
 
@@ -62,6 +62,8 @@ local STATUS_IDLE     = 1
 local STATUS_INVITING = 2
 local STATUS_INVITED  = 3
 local STATUS_LEAVING  = 4
+
+SLASH_LSY1 = "/lsy"
 
 LSY.supportedInstances = {}
 
@@ -90,13 +92,13 @@ end
 -- print current status and config to chatframe
 function LSY:PrintStatus()
     if not self.db.Enable then
-        self:PrintMessage(RED_FONT_COLOR_CODE .. SLASH_STOPWATCH_PARAM_STOP1 .. FONT_COLOR_CODE_CLOSE .. SOCIAL_SHARE_TEXT)
+        self:PrintMessage(RED_FONT_COLOR_CODE .. " ".. SLASH_STOPWATCH_PARAM_STOP1 .. FONT_COLOR_CODE_CLOSE .. SOCIAL_SHARE_TEXT)
     elseif self.status == STATUS_INIT then
-        self:PrintMessage(LIGHTYELLOW_FONT_COLOR_CODE .. LFG_LIST_LOADING .. FONT_COLOR_CODE_CLOSE)
+        self:PrintMessage(LIGHTYELLOW_FONT_COLOR_CODE .. " ".. LFG_LIST_LOADING .. FONT_COLOR_CODE_CLOSE)
     elseif self.db.AutoQueue and self.pausedQueue then
-        self:PrintMessage(LIGHTYELLOW_FONT_COLOR_CODE .. SLASH_STOPWATCH_PARAM_PAUSE1 .. FONT_COLOR_CODE_CLOSE)
+        self:PrintMessage(LIGHTYELLOW_FONT_COLOR_CODE .. " ".. SLASH_STOPWATCH_PARAM_PAUSE1 .. FONT_COLOR_CODE_CLOSE)
     else
-        self:PrintMessage(GREEN_FONT_COLOR_CODE .. START .. FONT_COLOR_CODE_CLOSE .. SOCIAL_SHARE_TEXT)
+        self:PrintMessage(GREEN_FONT_COLOR_CODE .. START .. " " .. FONT_COLOR_CODE_CLOSE .. SOCIAL_SHARE_TEXT)
     end
 end
 
@@ -157,6 +159,10 @@ function LSY:Initialize()
     self:Release()
     self.status = STATUS_INIT
     self.queue = {}
+
+    SlashCmdList["LSY"] = function(msg)
+        LSY:HandleSlashCommand(msg)
+    end
 
     if self.db.Enable then
         LSY:CreateSharesFrame()
@@ -383,7 +389,7 @@ function LSY:Invite(name)
     end
 
     self:DebugPrint("Inviting %s to party", name)
-    self:SendMessage(L["InviteMessage"], "WHISPER", name)
+    self:SendMessage(self.db.InviteMessageToPlayer, "WHISPER", name)
 
     C_PartyInfo_ConfirmLeaveParty()
     ResetInstances()
@@ -415,10 +421,10 @@ function LSY:ConfirmInvite()
     C_Timer.After(2, function()
         local supportedZone, userZoneID = LSY:CheckUserLocation()
         if supportedZone then
-            self:SendMessage(L["WelcomeMsg1"], 'CHECK')
-            self:SendMessage(L["WelcomeMsg2"], 'CHECK')
-            self:SendMessage(L["WelcomeMsg3"], 'CHECK')
-            self:SendMessage(L["WelcomeMsg4"], 'CHECK')
+            if (self.db.WelcomeMsg1) then self:SendMessage(self.db.WelcomeMsg1, 'CHECK') end
+            if (self.db.WelcomeMsg2) then self:SendMessage(self.db.WelcomeMsg2, 'CHECK') end
+            if (self.db.WelcomeMsg3) then self:SendMessage(self.db.WelcomeMsg3, 'CHECK') end
+            if (self.db.WelcomeMsg4) then self:SendMessage(self.db.WelcomeMsg4, 'CHECK') end
 
             if userZoneID == 118 then
                 self:SendMessage("You need to have the first boss already killed on 25 Heroic.", 'CHECK')
@@ -639,13 +645,15 @@ function LSY:RecvChatMessage(text)
         self:SendMessage(L["COMMAND_LEAD"], 'CHECK')
     end
 
-    if string.upper(text) == "!HEROIC" or string.upper(text) == "!HC" then
+    -- Check if heroic
+    if LSY:FindStringInHaystack(text, self.db.CommandsForHeroic) then
         SetRaidDifficultyID(15)
         self:SendMessage(L["COMMAND_HEROIC"], 'CHECK')
         self:SendMessage(L["HINT_HEROIC"], 'CHECK')
     end
 
-    if string.upper(text) == "!NORMAL" or string.upper(text) == "!NHC" or string.upper(text) == "!NM" then
+    -- Check if normal
+    if LSY:FindStringInHaystack(text, self.db.CommandsForNormal) then
         SetRaidDifficultyID(14)
         self:SendMessage(L["COMMAND_NORMAL"], 'CHECK')
         self:SendMessage(L["HINT_NORMAL"], 'CHECK')
@@ -709,15 +717,7 @@ do
 
     -- override point for FreeInstanceSharer_DynamicWhisper
     function LSY:IsInviteOnWhisperMsg(_, text)
-        local messages = { strsplit(",", self.db.InviteOnWhisperMsg) }
-
-        for _, msg in ipairs(messages) do
-            msg = msg:trim():lower() -- Leerzeichen entfernen, lowercase
-            if text:lower() == msg then
-                return true
-            end
-        end
-        return false
+        return LSY:FindStringInHaystack(text, self.db.InviteOnWhisperMsg)
     end
 
     function LSY:CHAT_MSG_WHISPER(_, text, sender)
@@ -835,4 +835,26 @@ function LSY:AreAllInstancesWithZoneIdEnabled(targetZoneId)
         end
     end
     return true
+end
+
+function LSY:FindStringInHaystack(needle, haystack)
+    local messages = { strsplit(",", haystack) }
+
+    for _, msg in ipairs(messages) do
+        msg = msg:trim():lower() -- Leerzeichen entfernen, lowercase
+        if needle:lower() == msg then
+            return true
+        end
+    end
+    return false
+end
+
+function LSY:HandleSlashCommand(msg)
+    msg = msg:lower():trim()
+
+    if msg == "show" then
+        LSY.sharesFrame:Show()
+    else
+        print("What?")
+    end
 end

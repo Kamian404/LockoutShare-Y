@@ -51,6 +51,7 @@ L["You're promoted to team leader. Good luck!"] = "Good luck and may the RNG be 
 L["InviteMessage"] = "Accept the invitation please."
 L["QUEUED"] = "You're queued. Position in queue: QCURR."
 L["QUEUED_SPAM"] = "My brother in Christ, I will literally invite you when I'm free. Repeat spamming will get you ignored. Your current position in queue: QCURR"
+L["QUEUE_LEAVE"] = "You are no longer queued."
 L["Instances"] = "Instances & Raids"
 L["WelcomeMsg1"] = "Hello SHARINGUSER, my fellow mount collector!"
 L["WelcomeMsg2"] = "Available dungeons in your location: SUPINSTANCE"

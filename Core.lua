@@ -298,6 +298,11 @@ function LSY:CheckUserLocation()
                     -- Handle faction-specific instances
                     if instance.factionSpecific then
                         if userFaction == self.playerfaction then
+                            if userZoneId == 118 then
+                                self:SendMessage("You need to have the first boss already killed on 25 Heroic.", 'CHECK')
+                                self:SendMessage("Kill Blood Queen boss only, then leave ICC.", 'CHECK')
+                                self:SendMessage("Then re-enter and go straight to Lich King.", 'CHECK')
+                            end
                             self.RaidDifficulty = instance.difficultyId
                             self.RaidForMsg = instance.displayName
                             LSY:UpdateCounterAndList(instance.displayName)
@@ -684,7 +689,15 @@ do
 
     -- override point for FreeInstanceSharer_DynamicWhisper
     function LSY:IsInviteOnWhisperMsg(_, text)
-        return text == self.db.InviteOnWhisperMsg
+        local messages = { strsplit(",", self.db.InviteOnWhisperMsg) }
+
+        for _, msg in ipairs(messages) do
+            msg = msg:trim():lower() -- Leerzeichen entfernen, lowercase
+            if text:lower() == msg then
+                return true
+            end
+        end
+        return false
     end
 
     function LSY:CHAT_MSG_WHISPER(_, text, sender)
@@ -769,4 +782,8 @@ end
 function LSY:manipulateTotalCount(number)
     self.db.totalCount = number
     LSY:UpdateSharesFrame()
+end
+
+function string.trim(s)
+    return (s:gsub("^%s*(.-)%s*$", "%1"))
 end

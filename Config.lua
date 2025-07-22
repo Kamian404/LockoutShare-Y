@@ -253,7 +253,7 @@ LSY.Options.args.Message = {
         },
         InviteOnBNWhisperMsg = {
             order = 03,
-            name = "Command for Sharing for BNet",
+            name = "Command for BNet Sharing",
             type = 'input',
         },
         LeaveQueueOnWhisperMsg = {
@@ -273,7 +273,7 @@ LSY.Options.args.Message = {
         },
         description_general = {
             order = 09,
-            name = "You can enter multiple commands by deviding with ','",
+            name = "You can enter multiple commands by deviding with comma ','",
             type = 'description',
         },
         blank1 = {
@@ -343,37 +343,37 @@ LSY.Options.args.Message = {
         },
         EnterQueueMsg = {
             order = 23,
-            name = L["Message When Entering Queue"],
+            name = L["Message when entering queue"],
             type = 'input',
             width = "full",
         },
         FetchErrorMsg = {
             order = 24,
-            name = L["Message When Failing to Fetch"],
+            name = L["Message when failing to fetch"],
             type = 'input',
             width = "full",
         },
         QueryQueueMsg = {
             order = 25,
-            name = L["Message When Quering Queue Position"],
+            name = L["Message when quering queue position"],
             type = 'input',
             width = "full",
         },
         LeaveQueueMsg = {
             order = 26,
-            name = L["Message When Leaving Queue"],
+            name = L["Message when leaving queue"],
             type = 'input',
             width = "full",
         },
         TLELeaveMsg = {
             order = 32,
-            name = L["Message Before Leaving due to Time Limit Exceeded"],
+            name = L["Message before leaving due to Time Limit Exceeded"],
             type = 'input',
             width = "full",
         },
         AutoLeaveMsg = {
             order = 33,
-            name = L["Message Before Leaving due to player entered instance"],
+            name = L["Message before leaving due to player entered instance"],
             type = 'input',
             width = "full",
         },
@@ -383,8 +383,8 @@ LSY.Options.args.Message = {
             "QCURR - The position of the player in queue." .. "\n" ..
             "QLEN - The length of the queue." .. "\n" ..
             "MTIME - Time Limit to wait players to enter instance." .. "\n" ..
-            "SUPINSTANCE - The Instance the Player stands infront of (hopefully)" .. "\n" ..
-            "SHARINGUSER - The Name of the Player." .. "\n" ..
+            "SUPINSTANCE - The instance the player stands infront of (hopefully)" .. "\n" ..
+            "SHARINGUSER - The name of the player." .. "\n" ..
             "NAME - The name and realm of your own character.",
             type = 'description',
         },
@@ -484,7 +484,7 @@ LSY.Options.args.Informations = {
             type = "description",
             width = "full",
             fontSize = "medium",
-            name = "|cffeda55f" .. "Support" .. ": |r" .. "Yermaw-Bronzebeard",
+            name = "|cffeda55f" .. "Support" .. ": |r" .. "Fudrick (Yermaw-Bronzebeard)",
         },
         version = {
             order = 2.5,

@@ -297,8 +297,10 @@ function LSY:CheckUserLocation()
                     -- Handle faction-specific instances
                     if instance.factionSpecific then
                         if userFaction == self.playerfaction then
+                            C_PartyInfo_ConfirmConvertToRaid()
                             self.RaidDifficulty = instance.difficultyId
                             self.RaidForMsg = instance.displayName
+                            SetRaidDifficultyID(self.RaidDifficulty)
                             LSY:UpdateCounterAndList(instance.displayName)
                             return true, userZoneId
                         else
@@ -309,12 +311,24 @@ function LSY:CheckUserLocation()
 
                     -- Handle non-faction-specific instances
                     else
+
+                        if userZoneId == 2025 and LSY:AreAllInstancesWithZoneIdEnabled(2025) then -- Special for Dragonflight, where Raid and Dungeon are in the same zone
+                            C_PartyInfo_ConfirmConvertToRaid()
+                            self.RaidForMsg = "Dawn of the Infinite and Vault of the Incarnates"
+                            SetDungeonDifficultyID(23)
+                            SetRaidDifficultyID(14)
+                            return true, userZoneId
+                        end
+                        
                         LSY:UpdateCounterAndList(instance.displayName)
+                        
                         if instance.category == "raid" then
                             C_PartyInfo_ConfirmConvertToRaid()
                             self.RaidDifficulty = instance.difficultyId
+                            SetRaidDifficultyID(self.RaidDifficulty)
                         elseif instance.category == "dungeon" then
                             self.DungeonDifficulty = instance.difficultyId
+                            SetDungeonDifficultyID(self.DungeonDifficulty)
                         end
                         self.RaidForMsg = instance.displayName
                         return true, userZoneId
@@ -599,7 +613,12 @@ end
 
 function LSY:RecvChatMessage(text)
     text = strlower(text)
-    if strfind(text, '+') then
+    if text == '++' then
+        self:SendMessage(L["OLD_COMMAND_FOR_LEAD"], 'CHECK')
+        return
+    end
+
+    if text == '+' then
         return self:Leave(self.db.AutoLeaveMsg)
     elseif strfind(text, 'raid') then
         return C_PartyInfo_ConfirmConvertToRaid()
@@ -789,4 +808,33 @@ end
 
 function string.trim(s)
     return (s:gsub("^%s*(.-)%s*$", "%1"))
+end
+
+function LSY:GetInstanceKeysByZoneId(targetZoneId)
+    local keys = {}
+
+    for key, data in pairs(InstanceData) do
+        local zones = data.zoneId
+        if type(zones) == "table" then
+            for _, zone in ipairs(zones) do
+                if zone == targetZoneId then
+                    table.insert(keys, key)
+                    break
+                end
+            end
+        elseif zones == targetZoneId then
+            table.insert(keys, key)
+        end
+    end
+
+    return keys
+end
+function LSY:AreAllInstancesWithZoneIdEnabled(targetZoneId)
+    local keys = self:GetInstanceKeysByZoneId(targetZoneId)
+    for _, key in ipairs(keys) do
+        if not self.db[key] then
+            return false
+        end
+    end
+    return true
 end

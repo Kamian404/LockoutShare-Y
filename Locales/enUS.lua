@@ -73,3 +73,4 @@ L["COMMAND_TIP"] = "Tips are not necessary, but welcome. You can mail it to me v
 L["IGNORE_PLAYER"] = "You are being ignored for spamming too frequently."
 L["ZONE_UNSOPPORTED"] = "Your current location doesn't have available instances for sharing"
 L["DND_MESSAGE"] = "Sharing is not enabled at the moment, please try again later."
+L["OLD_COMMAND_FOR_LEAD"] = "This is an old command. Please invite your friends directly before entering or use !lead."

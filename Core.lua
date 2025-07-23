@@ -431,7 +431,7 @@ function LSY:ConfirmInvite()
 
     -- check where the player is and if we support his location
     C_Timer.After(2, function()
-        self.sharinguser, self.sharinguserRealm = UnitFullName("party1")
+        self.sharinguser = UnitName("party1")
         local supportedZone, userZoneID = LSY:CheckUserLocation()
         if supportedZone then
             if (self.db.WelcomeMsg1) then self:SendMessage(self.db.WelcomeMsg1, 'CHECK') end
@@ -646,7 +646,7 @@ function LSY:RecvChatMessage(text, playerName)
         self:SendMessage(self.db.TipMsg, 'WHISPER', playerName)
     end
 
-    if self.sharinguser .. "-" .. self.sharinguserRealm == playerName then
+    if self.sharinguser == strsplit("-", playerName) then
         if text == '+' then
             return self:Leave(self.db.AutoLeaveMsg)
         elseif strfind(text, 'raid') then

@@ -318,7 +318,7 @@ function LSY:CheckUserLocation()
                         else
                             self:SendMessage(L["FACTIONSPECIFIC"], 'CHECK')
                             C_Timer.After(1, function() C_PartyInfo.LeaveParty() end)
-                            return false, userZoneId
+                            return false, userZoneId    
                         end
 
                     -- Handle non-faction-specific instances
@@ -630,7 +630,7 @@ function LSY:QueueQuery(name)
     return playerIndex
 end
 
-function LSY:RecvChatMessage(text)
+function LSY:RecvChatMessage(text, playerName)
     text = strlower(text)
     if text == '++' then
         self:SendMessage(L["OLD_COMMAND_FOR_LEAD"], 'CHECK')
@@ -646,11 +646,11 @@ function LSY:RecvChatMessage(text)
     end
 
     if string.upper(text) == "!INFO" then
-        self:SendMessage(L["ADDON_INFO"], 'CHECK')
+        self:SendMessage(L["ADDON_INFO"], 'WHISPER', playerName)
     end
 
     if string.upper(text) == "!TIP" then
-        self:SendMessage(self.db.TipMsg, 'CHECK')
+        self:SendMessage(self.db.TipMsg, 'WHISPER', playerName)
     end
 
     if string.upper(text) == "!LEAD" then
@@ -680,13 +680,13 @@ end
 function LSY:CHAT_MSG_PARTY(_, text, playerName)
     self:DebugPrint("Received party message '%s' from %s", text, playerName)
 
-    self:RecvChatMessage(text)
+    self:RecvChatMessage(text, playerName)
 end
 
 function LSY:CHAT_MSG_RAID(_, text, playerName)
     self:DebugPrint("Received raid message '%s' from %s", text, playerName)
 
-    self:RecvChatMessage(text)
+    self:RecvChatMessage(text, playerName)
 end
 
 function LSY:LFG_LIST_ACTIVE_ENTRY_UPDATE(_)
@@ -728,10 +728,10 @@ do
         end
     end
 
-    function LSY:CHAT_MSG_WHISPER(_, text, sender)
-        self:DebugPrint("Received whisper '%s' from %s", text, sender)
+    function LSY:CHAT_MSG_WHISPER(_, text, playerName)
+        self:DebugPrint("Received whisper '%s' from %s", text, playerName)
 
-        if self:DetectMaliciousUser(sender) then return end
+        if self:DetectMaliciousUser(playerName) then return end
 
         local inviteTriggered = false
 
@@ -756,15 +756,15 @@ do
         if inviteTriggered then
             self.whisperedCommand = text
             if not self.db.AutoQueue then
-                self:Invite(sender)
+                self:Invite(playerName)
             else
-                self:QueuePush(sender)
+                self:QueuePush(playerName)
             end
         elseif self.db.LeaveQueueOnWhisper and text == self.db.LeaveQueueOnWhisperMsg then
-            self:QueuePop(sender, self.db.LeaveQueueMsg)
+            self:QueuePop(playerName, self.db.LeaveQueueMsg)
         end
 
-        self:RecvChatMessage(text)
+        self:RecvChatMessage(text, playerName)
     end
 end
 

@@ -225,7 +225,7 @@ InstanceData = {
         zoneId = {2200},
         instanceId = 2549,
         category = "transmogsAndPets",
-        difficultyId = 15,
+        difficultyId = 14,
         description = "Amirdrassil, the Dream's Hope (normal/heroic) [Fyrakk]",
     }
 }

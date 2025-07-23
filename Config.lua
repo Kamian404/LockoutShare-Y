@@ -404,6 +404,7 @@ LSY.Options.args.Message = {
             name = "You can insert following words into the text field, and it will be replace by corresponding variables." .. "\n" ..
             "QCURR - The position of the player in queue." .. "\n" ..
             "QLEN - The length of the queue." .. "\n" ..
+            "QWAIT - The estimated waiting time for the queue." .. "\n" ..
             "MTIME - Time Limit to wait players to enter instance." .. "\n" ..
             "SUPINSTANCE - The instance the player stands infront of (hopefully)" .. "\n" ..
             "SHARINGUSER - The name of the player." .. "\n" ..
@@ -533,6 +534,7 @@ LSY.Options.args.Informations = {
             width = "full",
             fontSize = "medium",
             name = "|cffeda55f/lsy |r- " .. "Show the Settings" .. "\n" ..
+                "|cffeda55f/lsy on/off |r- " .. "Activate/Deactivates the Addon" .. "\n" ..
                 "|cffeda55f/lsy show |r- " .. "Show the Counter-Window" .. "\n" ..
                 "|cffeda55f/lsy dnd |r- " .. "Activates DND & stops sharing" .. "\n"
         },

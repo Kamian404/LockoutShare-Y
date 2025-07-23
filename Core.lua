@@ -597,6 +597,10 @@ end
 function LSY:QueuePush(name)
     self:DebugPrint("Adding %s to queue", name)
 
+    if self.db.DNDMessage then
+        return
+    end
+
     local playerIndex = self:QueueQuery(name)
     if not playerIndex then
         tinsert(self.queue, name)
@@ -891,6 +895,12 @@ end
 function LSY:HandleSlashCommand(msg)
     msg = msg:lower():trim()
 
+    if msg == "on" then
+        self.db.Enable = true
+    elseif msg == "off" then
+        self.db.Enable = false
+    end
+
     if self.db.Enable then
         if msg == "show" then
             if LSY.sharesFrame:IsShown() then
@@ -899,7 +909,11 @@ function LSY:HandleSlashCommand(msg)
                 LSY.sharesFrame:Show()
             end
         elseif msg == "dnd" then
-            print("Not working atm, still working on it. Just activate on settings in the meantime")
+            if self.db.DNDMessage then
+                self.db.DNDMessage = false
+            else
+                self.db.DNDMessage = true
+            end
         else
             LSY:ShowConfig()
         end

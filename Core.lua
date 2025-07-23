@@ -298,7 +298,6 @@ end
 function LSY:CheckUserLocation()
     local userZoneId = C_Map.GetBestMapForUnit("party1")
     local userFaction = UnitFactionGroup("party1")
-    self.sharinguser = UnitName("party1")
 
     for key, instance in pairs(InstanceData) do
         -- Only continue if this instance is enabled in the addon settings
@@ -432,6 +431,7 @@ function LSY:ConfirmInvite()
 
     -- check where the player is and if we support his location
     C_Timer.After(2, function()
+        self.sharinguser = UnitName("party1")
         local supportedZone, userZoneID = LSY:CheckUserLocation()
         if supportedZone then
             if (self.db.WelcomeMsg1) then self:SendMessage(self.db.WelcomeMsg1, 'CHECK') end
@@ -495,6 +495,7 @@ function LSY:Release()
         C_PartyInfo_ConfirmLeaveParty()
     end
 
+    self.sharinguser = ""
     self.status = STATUS_IDLE
 end
 
@@ -633,16 +634,8 @@ end
 function LSY:RecvChatMessage(text, playerName)
     text = strlower(text)
     if text == '++' then
-        self:SendMessage(L["OLD_COMMAND_FOR_LEAD"], 'CHECK')
+        self:SendMessage(L["OLD_COMMAND_FOR_LEAD"], 'WHISPER', playerName)
         return
-    end
-
-    if text == '+' then
-        return self:Leave(self.db.AutoLeaveMsg)
-    elseif strfind(text, 'raid') then
-        return C_PartyInfo_ConfirmConvertToRaid()
-    elseif strfind(text, 'party') then
-        return C_PartyInfo_ConvertToParty()
     end
 
     if string.upper(text) == "!INFO" then
@@ -653,27 +646,37 @@ function LSY:RecvChatMessage(text, playerName)
         self:SendMessage(self.db.TipMsg, 'WHISPER', playerName)
     end
 
-    if string.upper(text) == "!LEAD" then
-        self.playerWantsLead = true
-        self:SendMessage(L["COMMAND_LEAD"], 'CHECK')
-    end
+    if self.sharinguser == playerName then
+        if text == '+' then
+            return self:Leave(self.db.AutoLeaveMsg)
+        elseif strfind(text, 'raid') then
+            return C_PartyInfo_ConfirmConvertToRaid()
+        elseif strfind(text, 'party') then
+            return C_PartyInfo_ConvertToParty()
+        end
 
-    -- Check if heroic
-    if LSY:FindStringInHaystack(text, self.db.CommandsForHeroic) then
-        SetRaidDifficultyID(15)
-        self:SendMessage(L["COMMAND_HEROIC"], 'CHECK')
-        self:SendMessage(L["HINT_HEROIC"], 'CHECK')
-    end
+        if string.upper(text) == "!LEAD" then
+            self.playerWantsLead = true
+            self:SendMessage(L["COMMAND_LEAD"], 'CHECK')
+        end
 
-    -- Check if normal
-    if LSY:FindStringInHaystack(text, self.db.CommandsForNormal) then
-        SetRaidDifficultyID(14)
-        self:SendMessage(L["COMMAND_NORMAL"], 'CHECK')
-        self:SendMessage(L["HINT_NORMAL"], 'CHECK')
-    end
+        -- Check if heroic
+        if LSY:FindStringInHaystack(text, self.db.CommandsForHeroic) then
+            SetRaidDifficultyID(15)
+            self:SendMessage(L["COMMAND_HEROIC"], 'CHECK')
+            self:SendMessage(L["HINT_HEROIC"], 'CHECK')
+        end
 
-    if string.upper(text) == "!MYTHIC" then
-        self:SendMessage(L["COMMAND_MYTHIC"], 'CHECK')
+        -- Check if normal
+        if LSY:FindStringInHaystack(text, self.db.CommandsForNormal) then
+            SetRaidDifficultyID(14)
+            self:SendMessage(L["COMMAND_NORMAL"], 'CHECK')
+            self:SendMessage(L["HINT_NORMAL"], 'CHECK')
+        end
+
+        if string.upper(text) == "!MYTHIC" then
+            self:SendMessage(L["COMMAND_MYTHIC"], 'CHECK')
+        end 
     end
 end
 

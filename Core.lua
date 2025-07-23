@@ -118,6 +118,8 @@ function LSY:SendMessage(text, chatType, channel, currIndex)
         self.sharinguser = ""
     end
 
+    local queuetime = #self.queue * 30
+    text = gsub(text, 'QWAIT', queuetime)
     text = gsub(text, 'QCURR', currIndex or 0)
     text = gsub(text, 'QLEN', #self.queue)
     text = gsub(text, 'MTIME', self.db.TimeLimit == 0 and UNLIMITED or self.db.TimeLimit)
@@ -350,7 +352,11 @@ function LSY:CheckUserLocation()
 
     -- If no valid instance was found for the current zone
     self:SendMessage(L["ZONE_UNSOPPORTED"], 'CHECK')
-    self:DebugPrint("Unsupported Zone: " .. userZoneId)
+    if userZoneId then
+        self:DebugPrint("Unsupported Zone: " .. userZoneId)
+    else 
+        self:DebugPrint("Unsupported Zone: " .. "Cant find any ID - Where is this player?!")
+    end
     C_Timer.After(1, function() C_PartyInfo.LeaveParty() end)
     return false, nil
 end
@@ -421,9 +427,10 @@ function LSY:ConfirmInvite()
     self.pendingInvite = nil
     self.playerWantsLead = false
 
-    -- Things for Pebble..
-    if LSY:FindStringInHaystack(self.whisperedCommand, self.db.CommandsForPebble) then
-        LSY:HandlePebble()
+    -- Things for Questsharing like Lost or Journey
+    if self.QuestSharing then
+        LSY:HandleQuestSharing()
+        return
     end
 
     -- check where the player is and if we support his location
@@ -729,7 +736,27 @@ do
 
         if self:DetectMaliciousUser(sender) then return end
 
-        if self.db.InviteOnWhisper and LSY:FindStringInHaystack(text, self.db.InviteOnWhisperMsg) or self.db.InviteOnWhisper and LSY:FindStringInHaystack(text, self.db.CommandsForPebble) then
+        local inviteTriggered = false
+
+        if self.db.InviteOnWhisper then
+            -- Standard Whisper-Command
+            if LSY:FindStringInHaystack(text, self.db.InviteOnWhisperMsg) then
+                self.QuestSharing = false
+                inviteTriggered = true
+
+            -- Lost in the Deep aktiv?
+            elseif self.db.LostInTheDeepDaily and LSY:FindStringInHaystack(text, self.db.CommandsForLost) then
+                self.QuestSharing = true
+                inviteTriggered = true
+
+            -- Journey aktiv?
+            elseif self.db.JourneyToTheTimelessIsle and LSY:FindStringInHaystack(text, self.db.CommandsForJourney) then
+                self.QuestSharing = true
+                inviteTriggered = true
+            end
+        end
+
+        if inviteTriggered then
             self.whisperedCommand = text
             if not self.db.AutoQueue then
                 self:Invite(sender)
@@ -739,10 +766,12 @@ do
         elseif self.db.LeaveQueueOnWhisper and text == self.db.LeaveQueueOnWhisperMsg then
             self:QueuePop(sender, self.db.LeaveQueueMsg)
         end
-        
+
         self:RecvChatMessage(text)
     end
 end
+
+
 
 function LSY:CHAT_MSG_BN_WHISPER(_, text, playerName, _, _, _, _, _, _, _, _, _, _, presenceID)
     self:DebugPrint("Received Battle.net whisper '%s' from %s(%s)", text, playerName, presenceID)
@@ -832,6 +861,7 @@ function LSY:GetInstanceKeysByZoneId(targetZoneId)
 
     return keys
 end
+
 function LSY:AreAllInstancesWithZoneIdEnabled(targetZoneId)
     local keys = self:GetInstanceKeysByZoneId(targetZoneId)
     for _, key in ipairs(keys) do
@@ -843,53 +873,95 @@ function LSY:AreAllInstancesWithZoneIdEnabled(targetZoneId)
 end
 
 function LSY:FindStringInHaystack(needle, haystack)
+    if type(haystack) ~= "string" or haystack == "" then return false end
+    if type(needle) ~= "string" or needle == "" then return false end
+
     local messages = { strsplit(",", haystack) }
 
     for _, msg in ipairs(messages) do
-        msg = msg:trim():lower() -- Leerzeichen entfernen, lowercase
+        msg = msg:trim():lower()
         if needle:lower() == msg then
             return true
         end
     end
+
     return false
 end
 
 function LSY:HandleSlashCommand(msg)
     msg = msg:lower():trim()
 
-    if msg == "show" then
-        LSY.sharesFrame:Show()
+    if self.db.Enable then
+        if msg == "show" then
+            if LSY.sharesFrame:IsShown() then
+                LSY.sharesFrame:Hide()
+            else
+                LSY.sharesFrame:Show()
+            end
+        elseif msg == "dnd" then
+            print("Not working atm, still working on it. Just activate on settings in the meantime")
+        else
+            LSY:ShowConfig()
+        end
     else
-        print("What?")
+        LSY:ShowConfig()
     end
 end
 
-function LSY:HandlePebble()
-    local userZoneId = C_Map.GetBestMapForUnit("party1")
-    for key, instance in pairs(InstanceData) do
-        -- Only continue if this instance is enabled in the addon settings
-        if self.db[key] then
-            for _, zoneId in ipairs(instance.zoneId) do
-                if zoneId == userZoneId then
-                    self:SendMessage(L["MOVE_OUT_DEEPHOLM"], 'CHECK')
-                    C_Timer.After(1, function() C_PartyInfo.LeaveParty() end)
-                else 
-                    LSY:UpdateCounterAndList(instance.displayName)
-                    self:SendMessage("Hello pet collector!", 'CHECK')
-                    self:SendMessage("You now have MTIME seconds to accept the Quest.", 'CHECK')
-                    self:SendMessage("As soon as you did write '+'in chat.", 'CHECK')
-                    local quest_ids = {instance.description}
+function LSY:HandleQuestSharing()
+    local key
+    local userFaction = UnitFactionGroup("party1")
 
-                    for _, questID in pairs(quest_ids) do
-                        local questID = tonumber(questID)
-                        local questLogIndex = C_QuestLog.GetLogIndexForQuestID(questID)
-                        if questLogIndex then
-                            QuestLogPushQuest(questLogIndex)
-                            return
-                        end
-                    end
-                end
+    if self:FindStringInHaystack(self.whisperedCommand, self.db.CommandsForLost) then
+        key = "LostInTheDeepDaily"
+    elseif self:FindStringInHaystack(self.whisperedCommand, self.db.CommandsForJourney) then
+        key = "JourneyToTheTimelessIsle"
+    end
+
+    local instance = InstanceData[key]
+    if not (instance and self.db[key]) then return end
+    
+    -- Journey is faction specific
+    if instance.factionSpecific then
+        if userFaction ~= self.playerfaction then
+            self:SendMessage("The quest is faction-specific. This means I can only share with FACTIONSPECIFIC characters.", 'CHECK')
+            C_Timer.After(1, function() C_PartyInfo.LeaveParty() end)
+            return
+        end
+    end
+
+    local userZoneId = C_Map.GetBestMapForUnit("party1")
+
+    -- Prüfen, ob der Spieler in Deepholm ist
+    for _, zoneId in ipairs(instance.zoneId) do
+        if zoneId == userZoneId then
+            self:SendMessage(L["MOVE_OUT_DEEPHOLM"], 'CHECK')
+            C_Timer.After(1, function() C_PartyInfo.LeaveParty() end)
+            return
+        end
+    end
+
+    -- Spieler ist NICHT in der Zone → Quest teilen
+    self:UpdateCounterAndList(instance.displayName)
+    self:SendMessage("Hello collector!", 'CHECK')
+    self:SendMessage("You now have MTIME seconds to accept the Quest.", 'CHECK')
+    self:SendMessage("As soon as you did write '+' in chat.", 'CHECK')
+
+    local questShared = false
+    for questIDstr in string.gmatch(instance.description, '([^,%s]+)') do
+        local questID = tonumber(questIDstr)
+        if questID then
+            local questLogIndex = C_QuestLog.GetLogIndexForQuestID(questID)
+            if questLogIndex then
+                QuestLogPushQuest(questLogIndex)
+                questShared = true
+            else
+                self:DebugPrint("Quest ID " .. questID .. " is not in your quest log and cannot be shared.")
             end
         end
+    end
+
+    if not questShared then
+        self:DebugPrint("None of the quests from this command are in your quest log and could not be shared.")
     end
 end

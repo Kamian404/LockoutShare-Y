@@ -271,9 +271,20 @@ LSY.Options.args.Message = {
             name = "Heroic Difficulty",
             type = 'input',
         },
-        CommandsForPebble = {
-            order = 06,
-            name = "Command for Pebble",
+        blankcommand = {
+            order = 06.1,
+            type = "description",
+            width = "full",
+            name = " ",
+        },
+        CommandsForLost = {
+            order = 07,
+            name = "Command for Lost",
+            type = 'input',
+        },
+        CommandsForJourney = {
+            order = 08,
+            name = "Command for Journey",
             type = 'input',
         },
         description_general = {
@@ -515,7 +526,8 @@ LSY.Options.args.Informations = {
             type = "description",
             width = "full",
             fontSize = "medium",
-            name = "|cffeda55f/lsy show |r- " .. "Show the Window" .. "\n" ..
+            name = "|cffeda55f/lsy |r- " .. "Show the Settings" .. "\n" ..
+                "|cffeda55f/lsy show |r- " .. "Show the Counter-Window" .. "\n" ..
                 "|cffeda55f/lsy dnd |r- " .. "Activates DND & stops sharing" .. "\n"
         },
         blank11 = {
@@ -570,4 +582,8 @@ function C:ShowConfig()
     else
         Settings_OpenToCategory(self.configFrameName)
     end
+end
+
+function LSY:ShowConfig()
+    Settings_OpenToCategory("LockoutShare-Y")
 end

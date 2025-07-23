@@ -34,7 +34,8 @@ P.WelcomeMsg3 = L["WELCOME_MSG_3"]
 P.WelcomeMsg4 = L["WELCOME_MSG_4"]
 P.CommandsForNormal = "!normal, !nhc, !nm"
 P.CommandsForHeroic = "!heroic, !hc"
-P.CommandsForPebble = "!lost"
+P.CommandsForLost = "!lost"
+P.CommandsForJourney = "!journey"
 P.Blacklist = {}
 
 G.DebugLog = {

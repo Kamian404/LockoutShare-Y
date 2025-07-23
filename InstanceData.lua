@@ -138,10 +138,10 @@ InstanceData = {
     },
     JourneyToTheTimelessIsle = {
         order = 5.2,
-        displayName = "Journey to the Timeless Isle (currently in dev, might not work)",
-        zoneId = {}, -- keine Zone definiert
+        displayName = "Journey to the Timeless Isle",
+        zoneId = {0},
         instanceId = nil,
-        category = "none",
+        category = "transmogsAndPets",
         difficultyId = nil,
         description = "33231, 33232",
         factionSpecific = true,
@@ -167,7 +167,7 @@ InstanceData = {
     },
     LostInTheDeepDaily = {
         order = 6.2,
-        displayName = "Lost in the Deep Daily (currently in dev, might not work)",
+        displayName = "Lost in the Deep Daily",
         zoneId = {207},
         instanceId = nil,
         category = "transmogsAndPets",

@@ -136,14 +136,15 @@ InstanceData = {
         description = "Icecrown Citadel (heroic) [Lich King]",
         factionSpecific = true,
     },
-    JournesToTheTimelessIsle = {
+    JourneyToTheTimelessIsle = {
         order = 5.2,
-        displayName = "Journes to the Timeless Isle",
+        displayName = "Journey to the Timeless Isle (currently in dev, might not work)",
         zoneId = {}, -- keine Zone definiert
         instanceId = nil,
         category = "none",
         difficultyId = nil,
-        description = "",
+        description = "33231, 33232",
+        factionSpecific = true,
     },
     BattleForDazarAlor = {
         order = 5.3,
@@ -166,12 +167,12 @@ InstanceData = {
     },
     LostInTheDeepDaily = {
         order = 6.2,
-        displayName = "Lost in the Deep Daily",
-        zoneId = {}, -- no zoneId
+        displayName = "Lost in the Deep Daily (currently in dev, might not work)",
+        zoneId = {207},
         instanceId = nil,
         category = "transmogsAndPets",
         difficultyId = nil,
-        description = "",
+        description = "26710",
     },
     SiegeOfOrgrimmar = {
         order = 6.3,
@@ -179,7 +180,7 @@ InstanceData = {
         zoneId = {390, 1530},
         instanceId = 1136,
         category = "transmogsAndPets",
-        difficultyId = 15,
+        difficultyId = 14,
         description = "Siege of Orgrimmar, 10 (heroic) [Garrosh Hellscream] / (normal) [Kor'kron Dark Shaman]",
     },
     EmeraldNightmare = {
@@ -198,11 +199,11 @@ InstanceData = {
         instanceId = 2164,
         category = "transmogsAndPets",
         difficultyId = 15,
-        description = "The Eternal Palace",
+        description = "The Eternal Palace (heroic) [Za'qul]",
     },
     CastleNathria = {
         order = 6.6,
-        displayName = "Castle Nathria",
+        displayName = "Castle Nathria (normal/heroic) [Sire Denathrius]",
         zoneId = {1525},
         instanceId = 2296,
         category = "transmogsAndPets",
@@ -211,20 +212,20 @@ InstanceData = {
     },
     AberrusTheShadowedCrucible = {
         order = 6.7,
-        displayName = "Aberrus, the shadowed Crucible",
+        displayName = "Aberrus, the shadowed Crucible (normal/heroic) [Sire Denathrius]",
         zoneId = {2133},
         instanceId = 2569,
         category = "transmogsAndPets",
         difficultyId = 14,
-        description = "Aberrus, the Shadowed Crucible :  Embodiment of the Hellforged",
+        description = "Aberrus, the Shadowed Crucible (normal/heroic) [Scalecommander Sarkareth]",
     },
     AmirdrassilTheDreamsHope = {
         order = 6.8,
-        displayName = "Amirdrassil, the Dream's Hope",
+        displayName = "Amirdrassil, the Dream's Hope (normal/heroic) [Sire Denathrius]",
         zoneId = {2200},
         instanceId = 2549,
         category = "transmogsAndPets",
         difficultyId = 15,
-        description = "Amirdrassil, the Dream's Hope (Heroic) : Fyrakk (Embodiment of the Blazing)",
+        description = "Amirdrassil, the Dream's Hope (normal/heroic) [Fyrakk]",
     }
 }

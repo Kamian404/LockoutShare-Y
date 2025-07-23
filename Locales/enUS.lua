@@ -64,3 +64,5 @@ L["DND_MESSAGE"] = "Sharing is not enabled at the moment, please try again later
 L["OLD_COMMAND_FOR_LEAD"] = "This is an old command. Please invite your friends directly before entering or use !lead."
 L["FETCH_ERROR_MSG"] = "Failed to fetch your character information from Battle.net, please PM NAME."
 L["LockoutShare-Y"] = "LockoutShare-Y"
+L["EXTEND_INSTANCE"] = "Auto-extend Instance %s."
+L["MOVE_OUT_DEEPHOLM"] = "Please move out of Deepholm."

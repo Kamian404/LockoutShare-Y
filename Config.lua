@@ -271,9 +271,14 @@ LSY.Options.args.Message = {
             name = "Heroic Difficulty",
             type = 'input',
         },
+        CommandsForPebble = {
+            order = 06,
+            name = "Command for Pebble",
+            type = 'input',
+        },
         description_general = {
             order = 09,
-            name = "You can enter multiple commands by deviding with comma ','",
+            name = "You can enter multiple commands by dividing with comma ','",
             type = 'description',
         },
         blank1 = {

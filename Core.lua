@@ -114,6 +114,10 @@ function LSY:SendMessage(text, chatType, channel, currIndex)
         return
     end
 
+    if not self.sharinguser then -- To prevent weird names
+        self.sharinguser = ""
+    end
+
     text = gsub(text, 'QCURR', currIndex or 0)
     text = gsub(text, 'QLEN', #self.queue)
     text = gsub(text, 'MTIME', self.db.TimeLimit == 0 and UNLIMITED or self.db.TimeLimit)
@@ -236,7 +240,7 @@ function LSY:UPDATE_INSTANCE_INFO()
 
                 if allowedDifficulties and tContains(allowedDifficulties, difficulty) then
                     SetSavedInstanceExtend(i, true)
-                    LSY:PrintMessage(L["Verlängere Instance %s."], link)
+                    LSY:PrintMessage(L["EXTEND_INSTANCE"], link)
                 end
             end
         end
@@ -416,6 +420,11 @@ function LSY:ConfirmInvite()
     self.invitedTime = GetTime()
     self.pendingInvite = nil
     self.playerWantsLead = false
+
+    -- Things for Pebble..
+    if LSY:FindStringInHaystack(self.whisperedCommand, self.db.CommandsForPebble) then
+        LSY:HandlePebble()
+    end
 
     -- check where the player is and if we support his location
     C_Timer.After(2, function()
@@ -715,17 +724,13 @@ do
         end
     end
 
-    -- override point for FreeInstanceSharer_DynamicWhisper
-    function LSY:IsInviteOnWhisperMsg(_, text)
-        return LSY:FindStringInHaystack(text, self.db.InviteOnWhisperMsg)
-    end
-
     function LSY:CHAT_MSG_WHISPER(_, text, sender)
         self:DebugPrint("Received whisper '%s' from %s", text, sender)
 
         if self:DetectMaliciousUser(sender) then return end
 
-        if self.db.InviteOnWhisper and self:IsInviteOnWhisperMsg(sender, text) then
+        if self.db.InviteOnWhisper and LSY:FindStringInHaystack(text, self.db.InviteOnWhisperMsg) or self.db.InviteOnWhisper and LSY:FindStringInHaystack(text, self.db.CommandsForPebble) then
+            self.whisperedCommand = text
             if not self.db.AutoQueue then
                 self:Invite(sender)
             else
@@ -856,5 +861,35 @@ function LSY:HandleSlashCommand(msg)
         LSY.sharesFrame:Show()
     else
         print("What?")
+    end
+end
+
+function LSY:HandlePebble()
+    local userZoneId = C_Map.GetBestMapForUnit("party1")
+    for key, instance in pairs(InstanceData) do
+        -- Only continue if this instance is enabled in the addon settings
+        if self.db[key] then
+            for _, zoneId in ipairs(instance.zoneId) do
+                if zoneId == userZoneId then
+                    self:SendMessage(L["MOVE_OUT_DEEPHOLM"], 'CHECK')
+                    C_Timer.After(1, function() C_PartyInfo.LeaveParty() end)
+                else 
+                    LSY:UpdateCounterAndList(instance.displayName)
+                    self:SendMessage("Hello pet collector!", 'CHECK')
+                    self:SendMessage("You now have MTIME seconds to accept the Quest.", 'CHECK')
+                    self:SendMessage("As soon as you did write '+'in chat.", 'CHECK')
+                    local quest_ids = {instance.description}
+
+                    for _, questID in pairs(quest_ids) do
+                        local questID = tonumber(questID)
+                        local questLogIndex = C_QuestLog.GetLogIndexForQuestID(questID)
+                        if questLogIndex then
+                            QuestLogPushQuest(questLogIndex)
+                            return
+                        end
+                    end
+                end
+            end
+        end
     end
 end

@@ -325,8 +325,8 @@ function LSY:CheckUserLocation()
                     else
 
                         if userZoneId == 2025 and LSY:AreAllInstancesWithZoneIdEnabled(2025) then -- Special for Dragonflight, where Raid and Dungeon are in the same zone
+                            instance.displayName = "Dawn of the Infinite and Vault of the Incarnates"
                             C_PartyInfo_ConfirmConvertToRaid()
-                            self.RaidForMsg = "Dawn of the Infinite and Vault of the Incarnates"
                             SetDungeonDifficultyID(23)
                             SetRaidDifficultyID(14)
                         elseif instance.category == "raid" then

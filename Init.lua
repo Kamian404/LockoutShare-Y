@@ -36,7 +36,7 @@ Core[4] = LSY.DF.global
 _G[addon] = Core
 
 -- Basic player and addon info cached once
-LSY.addonPrefix = "\124cFF70B8FF" .. addon .. "\124r: "
+LSY.addonPrefix = "\124cFF70B8FF" .. "LockoutShare-Y" .. "\124r: "
 LSY.playerFullName = UnitName('player') .. '-' .. GetRealmName()
 LSY.playerGUID = UnitGUID('player')
 LSY.sharinguser = ""

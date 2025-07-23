@@ -393,6 +393,12 @@ LSY.Options.args.Message = {
             type = 'input',
             width = "full",
         },
+        TipMsg = {
+            order = 34,
+            name = "Message for tips",
+            type = 'input',
+            width = "full",
+        },
         TextReplace = {
             order = 91,
             name = "You can insert following words into the text field, and it will be replace by corresponding variables." .. "\n" ..

@@ -329,12 +329,7 @@ function LSY:CheckUserLocation()
                             self.RaidForMsg = "Dawn of the Infinite and Vault of the Incarnates"
                             SetDungeonDifficultyID(23)
                             SetRaidDifficultyID(14)
-                            return true, userZoneId
-                        end
-                        
-                        LSY:UpdateCounterAndList(instance.displayName)
-                        
-                        if instance.category == "raid" then
+                        elseif instance.category == "raid" then
                             C_PartyInfo_ConfirmConvertToRaid()
                             self.RaidDifficulty = instance.difficultyId
                             SetRaidDifficultyID(self.RaidDifficulty)
@@ -342,6 +337,8 @@ function LSY:CheckUserLocation()
                             self.DungeonDifficulty = instance.difficultyId
                             SetDungeonDifficultyID(self.DungeonDifficulty)
                         end
+
+                        LSY:UpdateCounterAndList(instance.displayName)
                         self.RaidForMsg = instance.displayName
                         return true, userZoneId
                     end
@@ -653,7 +650,7 @@ function LSY:RecvChatMessage(text)
     end
 
     if string.upper(text) == "!TIP" then
-        self:SendMessage(L["COMMAND_TIP"], 'CHECK')
+        self:SendMessage(self.db.TipMsg, 'CHECK')
     end
 
     if string.upper(text) == "!LEAD" then

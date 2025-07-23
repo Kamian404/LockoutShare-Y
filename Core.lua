@@ -118,7 +118,7 @@ function LSY:SendMessage(text, chatType, channel, currIndex)
         self.sharinguser = ""
     end
 
-    local queuetime = #self.queue * 30
+    local queuetime = #self.queue * 30 > 119 and math.floor(#self.queue * 30 / 60) .. " minutes" or #self.queue * 30 .. " seconds"
     text = gsub(text, 'QWAIT', queuetime)
     text = gsub(text, 'QCURR', currIndex or 0)
     text = gsub(text, 'QLEN', #self.queue)

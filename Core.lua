@@ -519,6 +519,7 @@ function LSY:FetchUpdate()
     elseif self.status == STATUS_INVITED then
         -- check max waiting time
         local elapsed = GetTime() - self.invitedTime
+
         if self.db.TimeLimit ~= 0 and elapsed >= self.db.TimeLimit then
             self:DebugPrint("Leaving party: Enter Time Limit Exceeded")
             self:Leave(self.db.TLELeaveMsg)
@@ -595,15 +596,20 @@ end
 
 -- add a player to queue
 function LSY:QueuePush(name)
-    self:DebugPrint("Adding %s to queue", name)
-
     if self.db.DNDMessage then
         return
     end
 
+    self:DebugPrint("Adding %s to queue", name)
+
     local playerIndex = self:QueueQuery(name)
     if not playerIndex then
-        tinsert(self.queue, name)
+        if self.VIPSharing then -- VIP will get share asap
+            table.insert(self.queue, 1, name)
+            self:SendMessage("Hi my VIP; You're the next one I'm inviting!", 'WHISPER', name)
+        else
+            tinsert(self.queue, name) -- Default for normal player
+        end
         if UnitInParty("player") then
             self:SendMessage(self.db.EnterQueueMsg, 'WHISPER', name, #self.queue)
         end
@@ -743,6 +749,7 @@ do
         local inviteTriggered = false
 
         if self.db.InviteOnWhisper then
+            self.VIPSharing = false
             -- Standard Whisper-Command
             if LSY:FindStringInHaystack(text, self.db.InviteOnWhisperMsg) then
                 self.QuestSharing = false
@@ -757,6 +764,12 @@ do
             elseif self.db.JourneyToTheTimelessIsle and LSY:FindStringInHaystack(text, self.db.CommandsForJourney) then
                 self.QuestSharing = true
                 inviteTriggered = true
+
+            -- VIP Command for Guild, Friends, etc
+            elseif LSY:FindStringInHaystack(text, self.db.CommandsForVIP) then
+                self.QuestSharing = false
+                inviteTriggered = true
+                self.VIPSharing = true
             end
         end
 

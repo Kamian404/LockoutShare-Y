@@ -59,6 +59,9 @@ function LSY:CreateSharesFrame()
     -- Last shared (immer sichtbar)
     frame.lastSharedText = frame:CreateFontString(nil, "OVERLAY", "GameFontNormal")
     frame.lastSharedText:SetPoint("BOTTOMLEFT", 15, 15)
+    frame.lastSharedText:SetWidth(290)              -- Platz für Text
+    frame.lastSharedText:SetWordWrap(true)          -- Automatischer Umbruch
+    frame.lastSharedText:SetJustifyH("LEFT")        -- Linksbündig
 
     -- Toggle Button für einklappen
     local toggleButton = CreateFrame("Button", nil, frame)
@@ -86,7 +89,7 @@ function LSY:CreateSharesFrame()
             contentContainer:Hide()
             plusTex:Show()
             minusTex:Hide()
-            frame:SetHeight(80)  -- Höhe für Titel + Total/Today + Last shared
+            frame:SetHeight(100)  -- Höhe für Titel + Total/Today + Last shared
         else
             contentContainer:Show()
             plusTex:Hide()
@@ -97,7 +100,7 @@ function LSY:CreateSharesFrame()
 
     self.sharesFrame = frame
 
-    if ElvUI then-- Skin erst hier aufrufen, wenn das Frame existiert:
+    if ElvUI then
         local E = unpack(ElvUI)
         if E and E:GetModule("Skins") then
             local S = E:GetModule("Skins")
@@ -130,10 +133,14 @@ function LSY:UpdateSharesFrame()
     for i, text in ipairs(self.lockouts or {}) do
         local label = frame.content:CreateFontString(nil, "OVERLAY", "GameFontHighlight")
         label:SetPoint("TOPLEFT", 0, yOffset)
+        label:SetWidth(250)
+        label:SetWordWrap(true)
+        label:SetJustifyH("LEFT")
         label:SetText(text)
         table.insert(frame.entries, label)
-        yOffset = yOffset - 18
+        yOffset = yOffset - label:GetStringHeight() - 6  -- Dynamisch Höhe abziehen
     end
+
 
     -- Höhe des Content-Frames für Scrollbar setzen
     frame.content:SetHeight(math.max(#frame.entries * 18, 1))

@@ -261,6 +261,11 @@ LSY.Options.args.Message = {
             name = "Command to Leave queue",
             type = 'input',
         },
+        CommandsForVIP = {
+            order = 04,
+            name = "Commands for VIPs",
+            type = 'input',
+        },
         CommandsForNormal = {
             order = 05,
             name = "Normal Difficulty",
@@ -514,7 +519,7 @@ LSY.Options.args.Informations = {
             type = "description",
             width = "full",
             fontSize = "medium",
-            name = "|cffeda55f" .. "Version" .. ": |r" .. "1.0.0",
+            name = "|cffeda55f" .. "Version" .. ": |r" .. "1.1.8",
         },
         header_commands_you = {
             order = 3,

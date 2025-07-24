@@ -362,9 +362,15 @@ LSY.Options.args.Message = {
             type = 'input',
             width = "full",
         },
+        VIPMessage = {
+            order = 22.1,
+            name = "Message for VIPs",
+            type = 'input',
+            width = "full",
+        },
         EnterQueueMsg = {
             order = 23,
-            name = L["Message when entering queue"],
+            name = L["ENTER_QUEUE"],
             type = 'input',
             width = "full",
         },

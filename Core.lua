@@ -606,7 +606,7 @@ function LSY:QueuePush(name)
     if not playerIndex then
         if self.VIPSharing then -- VIP will get share asap
             table.insert(self.queue, 1, name)
-            self:SendMessage("Hi my VIP; You're the next one I'm inviting!", 'WHISPER', name)
+            self:SendMessage(L["VIP_MESSAGE"], 'WHISPER', name)
         else
             tinsert(self.queue, name) -- Default for normal player
         end

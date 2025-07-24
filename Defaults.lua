@@ -16,6 +16,7 @@ P.LeaveQueueOnWhisper = true
 P.LeaveQueueOnWhisperMsg = '!leave'
 P.AutoLeave = true
 P.InviteTimeLimit = 10
+P.TimeExtraForLead = 10
 P.TimeLimit = 30
 P.WhisperMessage = true
 P.BNWhisperMessage = false

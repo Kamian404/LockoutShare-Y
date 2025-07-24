@@ -531,7 +531,7 @@ function LSY:FetchUpdate()
             if UnitIsGroupLeader('player') then
                 local instanceID = select(4, UnitPosition('party1'))
                 if instanceID and self.supportedInstances[instanceID] then
-                    self.invitedTime = self.invitedTime + 10
+                    self.invitedTime = self.invitedTime + self.db.TimeExtraForLead
                     self:SendMessage(L["HINT_LEAD"], 'CHECK')
                     self:DebugPrint("Promote Player to lead, he entered instance %d", instanceID)
                     if GetNumGroupMembers() > 1 then

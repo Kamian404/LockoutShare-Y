@@ -134,30 +134,43 @@ LSY.Options.args.General = {
                 },
                 LeaveQueueOnWhisper = {
                     order = 32,
-                    name = "Leave Queue on Whisper",
+                    name = "Leave queue on whisper",
                     type = 'toggle',
                 },
                 AutoLeave = {
                     order = 33,
-                    name = "Auto Leave Party",
+                    name = "Auto leave party",
                     type = 'toggle',
+                },
+                blankTimes = {
+                    order = 33.1,
+                    type = "description",
+                    width = "full",
+                    name = " ",
                 },
                 InviteTimeLimit = {
                     order = 34,
-                    name = "Invite Time Limit (s)",
+                    name = "Invite time limit (s)",
                     desc = "Time limit for user to accept invitation. If set to zero, no time limit is imposed.",
                     type = 'range',
                     min = 0, max = 60, step = 1,
                 },
                 TimeLimit = {
                     order = 35,
-                    name = "Enter Time Limit (s)",
+                    name = "Enter time limit (s)",
                     desc = "Time limit for user to enter instance. If set to zero, no time limit is imposed.",
                     type = 'range',
                     min = 0, max = 120, step = 1,
                 },
-                Pause = {
+                TimeExtraForLead = {
                     order = 36,
+                    name = "Extra Time after promote (s)",
+                    desc = "This will extend the Time for x seconds, so the User can do stuff after lead given.",
+                    type = 'range',
+                    min = 0, max = 60, step = 1,
+                },
+                Pause = {
+                    order = 37,
                     name = function()
                         return not LSY.pausedQueue and SLASH_STOPWATCH_PARAM_PAUSE1 or CONTINUE
                     end,
@@ -290,6 +303,11 @@ LSY.Options.args.Message = {
         CommandsForJourney = {
             order = 08,
             name = "Command for Journey",
+            type = 'input',
+        },
+        CommandsBlacklist = {
+            order = 08.1,
+            name = "Blacklisted Commands",
             type = 'input',
         },
         description_general = {

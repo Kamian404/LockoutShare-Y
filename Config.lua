@@ -308,6 +308,7 @@ LSY.Options.args.Message = {
         CommandsBlacklist = {
             order = 08.1,
             name = "Blacklisted Commands",
+            desc = "List of commands we dont want to accept",
             type = 'input',
         },
         description_general = {
@@ -543,7 +544,7 @@ LSY.Options.args.Informations = {
             type = "description",
             width = "full",
             fontSize = "medium",
-            name = "|cffeda55f" .. "Version" .. ": |r" .. "1.1.9",
+            name = "|cffeda55f" .. "Version" .. ": |r" .. "1.1.10",
         },
         header_commands_you = {
             order = 3,

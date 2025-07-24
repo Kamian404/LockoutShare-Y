@@ -656,6 +656,10 @@ function LSY:RecvChatMessage(text, playerName)
         self:SendMessage(self.db.TipMsg, 'WHISPER', playerName)
     end
 
+    if LSY:FindStringInHaystack(text, self.db.CommandsBlacklist) then
+        self:SendMessage(L["BLACKLIST_COMMAND"] .. self.db.InviteOnWhisperMsg, 'WHISPER', playerName)
+    end
+
     if self.sharinguser == strsplit("-", playerName) then
         if text == '+' then
             return self:Leave(self.db.AutoLeaveMsg)

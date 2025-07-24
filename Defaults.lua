@@ -39,6 +39,7 @@ P.CommandsForHeroic = "!heroic, !hc"
 P.CommandsForLost = "!lost"
 P.CommandsForJourney = "!journey"
 P.CommandsForVIP = ""
+P.CommandsBlacklist = "!poop"
 P.TipMsg = L["COMMAND_TIP"]
 P.Blacklist = {}
 

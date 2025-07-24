@@ -543,7 +543,7 @@ LSY.Options.args.Informations = {
             type = "description",
             width = "full",
             fontSize = "medium",
-            name = "|cffeda55f" .. "Version" .. ": |r" .. "1.1.8",
+            name = "|cffeda55f" .. "Version" .. ": |r" .. "1.1.9",
         },
         header_commands_you = {
             order = 3,

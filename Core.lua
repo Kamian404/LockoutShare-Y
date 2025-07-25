@@ -92,7 +92,7 @@ end
 -- print current status and config to chatframe
 function LSY:PrintStatus()
     if not self.db.Enable then
-        self:PrintMessage(RED_FONT_COLOR_CODE .. " ".. SLASH_STOPWATCH_PARAM_STOP1 .. FONT_COLOR_CODE_CLOSE .. SOCIAL_SHARE_TEXT)
+        self:PrintMessage(RED_FONT_COLOR_CODE .. SLASH_STOPWATCH_PARAM_STOP1 .. " ".. FONT_COLOR_CODE_CLOSE .. SOCIAL_SHARE_TEXT)
     elseif self.status == STATUS_INIT then
         self:PrintMessage(LIGHTYELLOW_FONT_COLOR_CODE .. " ".. LFG_LIST_LOADING .. FONT_COLOR_CODE_CLOSE)
     elseif self.db.AutoQueue and self.pausedQueue then
@@ -913,9 +913,13 @@ function LSY:HandleSlashCommand(msg)
     msg = msg:lower():trim()
 
     if msg == "on" then
+        if self.db.Enable then
+            self:PrintMessage(GREEN_FONT_COLOR_CODE .. "LSY is already on")
+            return
+        end
         self.db.Enable = true
-    elseif msg == "off" then
-        self.db.Enable = false
+        LSY:Initialize()
+        return
     end
 
     if self.db.Enable then
@@ -928,13 +932,21 @@ function LSY:HandleSlashCommand(msg)
         elseif msg == "dnd" then
             if self.db.DNDMessage then
                 self.db.DNDMessage = false
+                LSY:RemoveDNDStatus()
             else
                 self.db.DNDMessage = true
+                LSY:UpdateDNDMessage()
             end
+        elseif msg == "off" then
+            self.db.Enable = false
+            LSY:Initialize()
+            return
         else
+            self:PrintMessage(RED_FONT_COLOR_CODE .. "Unknown command")
             LSY:ShowConfig()
         end
     else
+        self:PrintMessage(RED_FONT_COLOR_CODE .. "LSY is deactivated")
         LSY:ShowConfig()
     end
 end

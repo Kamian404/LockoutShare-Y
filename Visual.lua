@@ -40,7 +40,7 @@ function LSY:CreateSharesFrame()
     -- Container für einklappbaren Content (ScrollFrame + Instanzliste)
     local contentContainer = CreateFrame("Frame", nil, frame)
     contentContainer:SetPoint("TOPLEFT", 15, -60)
-    contentContainer:SetPoint("BOTTOMRIGHT", -35, 40)
+    contentContainer:SetPoint("BOTTOMRIGHT", -35, 60)
     frame.contentContainer = contentContainer
 
     -- ScrollFrame im Container
@@ -58,10 +58,17 @@ function LSY:CreateSharesFrame()
 
     -- Last shared (immer sichtbar)
     frame.lastSharedText = frame:CreateFontString(nil, "OVERLAY", "GameFontNormal")
-    frame.lastSharedText:SetPoint("BOTTOMLEFT", 15, 15)
+    frame.lastSharedText:SetPoint("BOTTOMLEFT", 15, 30)
     frame.lastSharedText:SetWidth(290)              -- Platz für Text
     frame.lastSharedText:SetWordWrap(true)          -- Automatischer Umbruch
     frame.lastSharedText:SetJustifyH("LEFT")        -- Linksbündig
+
+    -- Last shared (immer sichtbar)
+    frame.lastSharedToText = frame:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+    frame.lastSharedToText:SetPoint("BOTTOMLEFT", 15, 15)
+    frame.lastSharedToText:SetWidth(290)              -- Platz für Text
+    frame.lastSharedToText:SetWordWrap(true)          -- Automatischer Umbruch
+    frame.lastSharedToText:SetJustifyH("LEFT")        -- Linksbündig
 
     -- Toggle Button für einklappen
     local toggleButton = CreateFrame("Button", nil, frame)
@@ -89,7 +96,7 @@ function LSY:CreateSharesFrame()
             contentContainer:Hide()
             plusTex:Show()
             minusTex:Hide()
-            frame:SetHeight(100)  -- Höhe für Titel + Total/Today + Last shared
+            frame:SetHeight(110)  -- Höhe für Titel + Total/Today + Last shared
         else
             contentContainer:Show()
             plusTex:Hide()
@@ -120,6 +127,7 @@ function LSY:UpdateSharesFrame()
     frame.totalText:SetText("Total: " .. (self.db.totalCount or 0))
     frame.todayText:SetText("Today: " .. (self.todayCount or 0))
     frame.lastSharedText:SetText("Last shared: " .. (self.lastShared or "-"))
+    frame.lastSharedToText:SetText("To: " .. (self.lastSharedTo or "-"))
 
     -- Alte Labels entfernen
     for _, label in ipairs(frame.entries) do

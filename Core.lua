@@ -358,12 +358,18 @@ function LSY:CheckUserLocation()
 end
 
 function LSY:UpdateCounterAndList(name)
+    
+    local partyName, partyRealm = UnitName("party1")
+    if partyRealm then
+        partyName = partyName .. "-" .. partyRealm
+    end
 
     LSY:AddOrUpdateInstanceCount(name)
     self.db.totalCount = (self.db.totalCount or 0) + 1
     LSY.totalCount = self.db.totalCount
     LSY.todayCount = (LSY.todayCount or 0) + 1
-    LSY.lastShared = name
+    LSY.lastShared = name    
+    LSY.lastSharedTo = partyName
     LSY:UpdateSharesFrame()
 end
 

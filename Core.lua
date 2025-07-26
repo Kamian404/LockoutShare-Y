@@ -66,6 +66,7 @@ local STATUS_LEAVING  = 4
 SLASH_LSY1 = "/lsy"
 
 LSY.supportedInstances = {}
+LSY.VIPList = {}
 
 function LSY:BuildSupportedInstances()
     self.supportedInstances = {}
@@ -530,9 +531,11 @@ function LSY:FetchUpdate()
         local elapsed = GetTime() - self.invitedTime
 
         if self.db.TimeLimit ~= 0 and elapsed >= self.db.TimeLimit then
-            self:DebugPrint("Leaving party: Enter Time Limit Exceeded")
-            self:Leave(self.db.TLELeaveMsg)
-            return
+            if not (LSY:IsVIP(strsplit("-", self.sharinguser)) and self.db.VIPUnlimitedTime) then
+                self:DebugPrint("Leaving party: Enter time limit exceeded")
+                self:Leave(self.db.TLELeaveMsg)
+                return
+            end
         end
 
         -- check player place and if he wants lead, we give him lead and 10 more seconds
@@ -787,6 +790,7 @@ do
                 self.QuestSharing = false
                 inviteTriggered = true
                 self.VIPSharing = true
+                LSY:AddToVIPList(playerName)
             end
         end
 
@@ -1022,4 +1026,26 @@ function LSY:HandleQuestSharing()
     if not questShared then
         self:DebugPrint("None of the quests from this command are in your quest log and could not be shared.")
     end
+end
+
+function LSY:AddToVIPList(playerName)
+
+    self:DebugPrint("Added to VIP List: " .. playerName)
+
+    local name = strsplit("-", playerName)
+    for _, vipName in ipairs(LSY.VIPList) do
+        if vipName == name then
+            return -- Bereits vorhanden, nichts tun
+        end
+    end
+    table.insert(LSY.VIPList, name)
+end
+
+function LSY:IsVIP(nameToFind)
+    for _, name in ipairs(LSY.VIPList) do
+        if name == nameToFind then
+            return true
+        end
+    end
+    return false
 end

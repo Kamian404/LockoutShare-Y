@@ -289,8 +289,13 @@ LSY.Options.args.Commands = {
                 name = "Commands for VIPs",
                 type = 'input',
             },
-            CommandsBlacklist = {
+            VIPUnlimitedTime = {
                 order = 01.5,
+                name = "Unlimited time for VIPs",
+                type = 'toggle',
+            },
+            CommandsBlacklist = {
+                order = 01.6,
                 name = "Blacklisted commands",
                 desc = "List of commands we dont want to accept",
                 type = 'input',

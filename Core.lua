@@ -177,6 +177,9 @@ function LSY:Initialize()
         self:RegisterBucketEvent('PLAYER_ENTERING_WORLD', 1, RequestRaidInfo)
         RequestRaidInfo()
     else
+        if LSY.sharesFrame then
+            LSY.sharesFrame:Hide()
+        end
         self:UnregisterAllEvents()
         if self.timer then
             self:CancelTimer(self.timer)

@@ -56,7 +56,18 @@ LSY.Options.args.General = {
             order = 1,
             name = ENABLE,
             type = 'toggle',
-            set = function(info, value) LSY.db[info[#info]] = value; LSY:Initialize() end,
+            set = function(info, value)
+                LSY.db[info[#info]] = value
+                LSY:Initialize()
+
+                if LSY.sharesFrame then
+                    if value then
+                        LSY.sharesFrame:Show()
+                    else
+                        LSY.sharesFrame:Hide()
+                    end
+                end
+            end,
         },
         Debug = {
             order = 2,

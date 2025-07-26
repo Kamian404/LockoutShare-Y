@@ -40,7 +40,11 @@ P.CommandsForLost = "!lost"
 P.CommandsForJourney = "!journey"
 P.CommandsForVIP = ""
 P.CommandsBlacklist = "!poop"
+P.CommandsForLead = "!lead"
+P.CommandsForLeave = "+"
 P.TipMsg = L["COMMAND_TIP"]
+P.LeadMsgBeforeEntering = L["COMMAND_LEAD"]
+P.LeadMsgAfterEntering = L["HINT_LEAD"]
 P.Blacklist = {}
 
 G.DebugLog = {

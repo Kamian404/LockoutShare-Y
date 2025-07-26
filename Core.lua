@@ -655,7 +655,11 @@ function LSY:RecvChatMessage(text, playerName)
     end
 
     if string.upper(text) == "!INFO" then
-        self:SendMessage(L["ADDON_INFO"], 'WHISPER', playerName)
+        self:SendMessage(L["COMMAND_INFO"], 'WHISPER', playerName)
+    end
+
+    if string.upper(text) == "!ADDON" then
+        self:SendMessage(L["ADDON_INFO"] .. C_AddOns.GetAddOnMetadata("LockoutShare-Y", "Version"), 'WHISPER', playerName)
     end
 
     if string.upper(text) == "!TIP" then
@@ -667,7 +671,7 @@ function LSY:RecvChatMessage(text, playerName)
     end
 
     if self.sharinguser == strsplit("-", playerName) then
-        if text == '+' then
+        if LSY:FindStringInHaystack(text, self.db.CommandsForLeave) then
             return self:Leave(self.db.AutoLeaveMsg)
         elseif strfind(text, 'raid') then
             return C_PartyInfo_ConfirmConvertToRaid()
@@ -675,7 +679,7 @@ function LSY:RecvChatMessage(text, playerName)
             return C_PartyInfo_ConvertToParty()
         end
 
-        if string.upper(text) == "!LEAD" then
+        if LSY:FindStringInHaystack(text, self.db.CommandsForLead) then
             self.playerWantsLead = true
             self:SendMessage(L["COMMAND_LEAD"], 'CHECK')
         end
@@ -947,6 +951,8 @@ function LSY:HandleSlashCommand(msg)
             self.db.Enable = false
             LSY:Initialize()
             return
+        elseif msg == "" then
+            LSY:ShowConfig()
         else
             self:PrintMessage(RED_FONT_COLOR_CODE .. "Unknown command")
             LSY:ShowConfig()

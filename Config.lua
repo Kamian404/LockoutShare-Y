@@ -21,7 +21,6 @@ local SLASH_STOPWATCH_PARAM_PAUSE1 = "Pause"
 
 local currentSelectBlacklist
 
-
 -- Hilfsfunktion: Erzeuge Toggle-Einträge aus InstanceData
 function GenerateTogglesFromInstanceData()
     local toggles = {}
@@ -183,7 +182,7 @@ LSY.Options.args.General = {
         },
         Message = {
             order = 40,
-            name = L["COMMANDS_MESSAGES"],
+            name = "Messages",
             type = 'group',
             guiInline = true,
             disabled = function() return not LSY.db.Enable or not LSY.db.AutoQueue end,
@@ -245,190 +244,256 @@ LSY.Options.args.General = {
     },
 }
 
-LSY.Options.args.Message = {
+LSY.Options.args.Commands = {
     order = 2,
     type = 'group',
-    name = L["COMMANDS_MESSAGES"],
+    name = L["SETTING_COMMANDS"],
     confirm = true,
     get = function(info) return LSY.db[info[#info]] end,
     set = function(info, value) LSY.db[info[#info]] = value end,
     args = {
-        header_general = {
+        header_invite = {
             order = 01,
             type = "header",
             width = "full",
-            name = "Allowed commands",
+            name = "Invite & Queue",
         },
-        InviteOnWhisperMsg = {
+            InviteOnWhisperMsg = {
+                order = 01.1,
+                name = "Command for Sharing",
+                type = 'input',
+            },
+            InviteOnBNWhisperMsg = {
+                order = 01.2,
+                name = "Command for BNet Sharing",
+                type = 'input',
+            },
+            LeaveQueueOnWhisperMsg = {
+                order = 01.3,
+                name = "Command to leave queue",
+                type = 'input',
+            },
+            CommandsForVIP = {
+                order = 01.4,
+                name = "Commands for VIPs",
+                type = 'input',
+            },
+            CommandsBlacklist = {
+                order = 01.5,
+                name = "Blacklisted commands",
+                desc = "List of commands we dont want to accept",
+                type = 'input',
+            },
+        header_lead_leave = {
             order = 02,
-            name = "Command for Sharing",
-            type = 'input',
-        },
-        InviteOnBNWhisperMsg = {
-            order = 03,
-            name = "Command for BNet Sharing",
-            type = 'input',
-        },
-        LeaveQueueOnWhisperMsg = {
-            order = 04,
-            name = "Command to Leave queue",
-            type = 'input',
-        },
-        CommandsForVIP = {
-            order = 04,
-            name = "Commands for VIPs",
-            type = 'input',
-        },
-        CommandsForNormal = {
-            order = 05,
-            name = "Normal Difficulty",
-            type = 'input',
-        },
-        CommandsForHeroic = {
-            order = 06,
-            name = "Heroic Difficulty",
-            type = 'input',
-        },
-        blankcommand = {
-            order = 06.1,
-            type = "description",
+            type = "header",
             width = "full",
-            name = " ",
+            name = "Lead & Leave",
         },
-        CommandsForLost = {
-            order = 07,
-            name = "Command for Lost",
-            type = 'input',
+            CommandsForLead = {
+                order = 02.1,
+                name = "Command to get lead",
+                type = 'input',
+                desc = "Command to get promoted to lead after entering"
+            },
+            CommandsForLeave = {
+                order = 02.2,
+                name = "Command to leave the session",
+                type = 'input',
+                desc = "Command to leave the session manually"
+            },
+        header_difficulty = {
+            order = 03,
+            type = "header",
+            width = "full",
+            name = "Difficulty",
         },
-        CommandsForJourney = {
-            order = 08,
-            name = "Command for Journey",
-            type = 'input',
+            CommandsForNormal = {
+                order = 03.1,
+                name = "Normal Difficulty",
+                type = 'input',
+            },
+            CommandsForHeroic = {
+                order = 03.2,
+                name = "Heroic Difficulty",
+                type = 'input',
+            },
+        header_quests = {
+            order = 04,
+            type = "header",
+            width = "full",
+            name = "Quest Sharing",
         },
-        CommandsBlacklist = {
-            order = 08.1,
-            name = "Blacklisted Commands",
-            desc = "List of commands we dont want to accept",
-            type = 'input',
-        },
+            CommandsForLost = {
+                order = 04.1,
+                name = "Command for Lost",
+                type = 'input',
+            },
+            CommandsForJourney = {
+                order = 04.2,
+                name = "Command for Journey",
+                type = 'input',
+            },
         description_general = {
             order = 09,
             name = "You can enter multiple commands by dividing with comma ','",
             type = 'description',
         },
-        blank1 = {
-            order = 09.1,
-            type = "description",
-            width = "full",
-            name = " ",
-        },
+    },
+}
+
+LSY.Options.args.Message = {
+    order = 3,
+    type = 'group',
+    name = L["SETTING_MESSAGE"],
+    confirm = true,
+    get = function(info) return LSY.db[info[#info]] end,
+    set = function(info, value) LSY.db[info[#info]] = value end,
+    args = {
         header_welcome_message = {
-            order = 10,
+            order = 01.1,
             type = "header",
             width = "full",
             name = "Welcome Messages",
         },
-        WelcomeMsg1 = {
-            order = 11,
-            name = L["WELCOME_HEADER_1"],
-            type = 'input',
-            width = "full",
-        },
-        WelcomeMsg2 = {
-            order = 12,
-            name = L["WELCOME_HEADER_2"],
-            type = 'input',
-            width = "full",
-        },
-        WelcomeMsg3 = {
-            order = 13,
-            name = L["WELCOME_HEADER_3"],
-            type = 'input',
-            width = "full",
-        },
-        WelcomeMsg4 = {
-            order = 14,
-            name = L["WELCOME_HEADER_4"],
-            type = 'input',
-            width = "full",
-        },
+            WelcomeMsg1 = {
+                order = 01.2,
+                name = L["WELCOME_HEADER_1"],
+                type = 'input',
+                width = "full",
+            },
+            WelcomeMsg2 = {
+                order = 01.3,
+                name = L["WELCOME_HEADER_2"],
+                type = 'input',
+                width = "full",
+            },
+            WelcomeMsg3 = {
+                order = 01.4,
+                name = L["WELCOME_HEADER_3"],
+                type = 'input',
+                width = "full",
+            },
+            WelcomeMsg4 = {
+                order = 01.5,
+                name = L["WELCOME_HEADER_4"],
+                type = 'input',
+                width = "full",
+            },
         description_welcome_message = {
-            order = 19.1,
+            order = 01.8,
             name = "Leave it blank to not send all 4 messages",
             type = 'description',
         },
         blank2 = {
-            order = 19.2,
+            order = 01.9,
+            type = "description",
+            width = "full",
+            name = " ",
+        },
+        header_invite_queue = {
+            order = 02,
+            type = "header",
+            width = "full",
+            name = "Invite & Queue Messages",
+        },
+            InviteMessageToPlayer = {
+                order = 02.1,
+                name = L["CONFIG_INVITE_MESSAGE"],
+                type = 'input',
+                width = "full",
+            },
+            VIPMessage = {
+                order = 02.2,
+                name = "Message for VIPs",
+                type = 'input',
+                width = "full",
+            },
+            EnterQueueMsg = {
+                order = 02.3,
+                name = L["ENTER_QUEUE"],
+                type = 'input',
+                width = "full",
+            },
+        blank3 = {
+            order = 02.9,
+            type = "description",
+            width = "full",
+            name = " ",
+        },
+        header_leave = {
+            order = 03,
+            type = "header",
+            width = "full",
+            name = "Leave Messages",
+        },
+            LeaveQueueMsg = {
+                order = 03.1,
+                name = L["Message when leaving queue"],
+                type = 'input',
+                width = "full",
+            },
+            TLELeaveMsg = {
+                order = 03.2,
+                name = L["Message before leaving due to Time Limit Exceeded"],
+                type = 'input',
+                width = "full",
+            },
+            AutoLeaveMsg = {
+                order = 03.3,
+                name = L["Message before leaving due to player entered instance"],
+                type = 'input',
+                width = "full",
+            },
+        blank4 = {
+            order = 03.9,
             type = "description",
             width = "full",
             name = " ",
         },
         header_other = {
-            order = 20,
+            order = 04,
             type = "header",
             width = "full",
             name = "Other Messages",
         },
-        DNDMsg = {
-            order = 21,
-            name = L["DND"],
-            type = 'input',
-            width = "full",
-        },
-        InviteMessageToPlayer = {
-            order = 22,
-            name = L["CONFIG_INVITE_MESSAGE"],
-            type = 'input',
-            width = "full",
-        },
-        VIPMessage = {
-            order = 22.1,
-            name = "Message for VIPs",
-            type = 'input',
-            width = "full",
-        },
-        EnterQueueMsg = {
-            order = 23,
-            name = L["ENTER_QUEUE"],
-            type = 'input',
-            width = "full",
-        },
-        FetchErrorMsg = {
-            order = 24,
-            name = L["Message when failing to fetch"],
-            type = 'input',
-            width = "full",
-        },
-        QueryQueueMsg = {
-            order = 25,
-            name = L["Message when quering queue position"],
-            type = 'input',
-            width = "full",
-        },
-        LeaveQueueMsg = {
-            order = 26,
-            name = L["Message when leaving queue"],
-            type = 'input',
-            width = "full",
-        },
-        TLELeaveMsg = {
-            order = 32,
-            name = L["Message before leaving due to Time Limit Exceeded"],
-            type = 'input',
-            width = "full",
-        },
-        AutoLeaveMsg = {
-            order = 33,
-            name = L["Message before leaving due to player entered instance"],
-            type = 'input',
-            width = "full",
-        },
-        TipMsg = {
-            order = 34,
-            name = "Message for tips",
-            type = 'input',
-            width = "full",
-        },
+            LeadMsgBeforeEntering = {
+                order = 4.1,
+                name = L["HEADER_LEAD_BEFORE"],
+                type = 'input',
+                width = "full",
+            },
+            LeadMsgAfterEntering = {
+                order = 4.2,
+                name = L["HEADER_LEAD_AFTER"],
+                type = 'input',
+                width = "full",
+            },
+            DNDMsg = {
+                order = 4.3,
+                name = L["DND"],
+                type = 'input',
+                width = "full",
+            },
+            FetchErrorMsg = {
+                order = 4.4,
+                name = L["FAIL_FETCH"],
+                type = 'input',
+                width = "full",
+            },
+            QueryQueueMsg = {
+                order = 4.5,
+                name = L["QUEUED_SPAM_HEADER"],
+                type = 'input',
+                width = "full",
+                desc = "Response to the user who wants a share and cant wait"
+            },
+            TipMsg = {
+                order = 4.6,
+                name = "Message for tips",
+                type = 'input',
+                width = "full",
+            },
         TextReplace = {
             order = 91,
             name = "You can insert following words into the text field, and it will be replace by corresponding variables." .. "\n" ..
@@ -447,22 +512,22 @@ LSY.Options.args.Message = {
 -- Instanzgruppen definieren (nach Bedarf erweiterbar)
 local instanceGroups = {
     raids = {
-        order = 3,
+        order = 4,
         name = "Raids",
         filter = function(data) return data.category == "raid" and not data.factionSpecific end,
     },
     megadungeons = {
-        order = 4,
+        order = 5,
         name = "Mega Dungeons",
         filter = function(data) return data.category == "dungeon" end,
     },
     factionSpecifics = {
-        order = 5,
+        order = 6,
         name = "Faction Specifics",
         filter = function(data) return data.factionSpecific == true end,
     },
     transmogsAndPets = {
-        order = 6,
+        order = 7,
         name = "Transmogs & Pets",
         filter = function(data)
             return data.category == "transmogsAndPets" or data.difficultyId == nil
@@ -544,7 +609,7 @@ LSY.Options.args.Informations = {
             type = "description",
             width = "full",
             fontSize = "medium",
-            name = "|cffeda55f" .. "Version" .. ": |r" .. "1.1.11",
+            name = "|cffeda55f" .. "Version" .. ": |r" .. C_AddOns.GetAddOnMetadata("LockoutShare-Y", "Version"),
         },
         header_commands_you = {
             order = 3,
@@ -607,7 +672,8 @@ function C:OnEnable()
 
     AceConfig:RegisterOptionsTable('LockoutShare-Y', LSY.Options, 'fis')
     local _, configFrameName = AceConfigDialog:AddToBlizOptions('LockoutShare-Y', L["LockoutShare-Y"], nil, 'General')
-    AceConfigDialog:AddToBlizOptions('LockoutShare-Y', L["COMMANDS_MESSAGES"], L["LockoutShare-Y"], 'Message')
+    AceConfigDialog:AddToBlizOptions('LockoutShare-Y', L["SETTING_COMMANDS"], L["LockoutShare-Y"], 'Commands')
+    AceConfigDialog:AddToBlizOptions('LockoutShare-Y', L["SETTING_MESSAGE"], L["LockoutShare-Y"], 'Message')
     AceConfigDialog:AddToBlizOptions('LockoutShare-Y', L["Instances"], L["LockoutShare-Y"], 'Instances')
     AceConfigDialog:AddToBlizOptions('LockoutShare-Y', "Informations", L["LockoutShare-Y"], 'Informations')
 

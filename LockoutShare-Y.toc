@@ -2,7 +2,7 @@
 ## Title: |cff1572cfLockout Share Y|r
 ## Notes: Share your Lockout-IDs to others!
 ## Author: Kamian
-## Version: v1.1.x
+## Version: v1.1.12
 ## SavedVariables: LockoutShareYDB
 ## SavedVariablesPerCharacter: LSYConfig
 ## IconTexture: Interface\AddOns\LockoutShare-Y\Icon.png

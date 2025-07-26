@@ -203,16 +203,16 @@ InstanceData = {
     },
     CastleNathria = {
         order = 6.6,
-        displayName = "Castle Nathria (normal/heroic) [Sire Denathrius]",
+        displayName = "Castle Nathria",
         zoneId = {1525},
         instanceId = 2296,
         category = "transmogsAndPets",
         difficultyId = 14,
-        description = "Castle Nathria",
+        description = "Castle Nathria (normal/heroic) [Sire Denathrius]",
     },
     AberrusTheShadowedCrucible = {
         order = 6.7,
-        displayName = "Aberrus, the shadowed Crucible (normal/heroic) [Sire Denathrius]",
+        displayName = "Aberrus, the shadowed Crucible",
         zoneId = {2133},
         instanceId = 2569,
         category = "transmogsAndPets",
@@ -221,7 +221,7 @@ InstanceData = {
     },
     AmirdrassilTheDreamsHope = {
         order = 6.8,
-        displayName = "Amirdrassil, the Dream's Hope (normal/heroic) [Sire Denathrius]",
+        displayName = "Amirdrassil, the Dream's Hope",
         zoneId = {2200},
         instanceId = 2549,
         category = "transmogsAndPets",

@@ -332,7 +332,7 @@ function LSY:CheckUserLocation()
                             C_PartyInfo_ConfirmConvertToRaid()
                             SetDungeonDifficultyID(23)
                             SetRaidDifficultyID(14)
-                        elseif instance.category == "raid" then
+                        elseif instance.category == "raid" or instance.category == "transmogsAndPets" then
                             C_PartyInfo_ConfirmConvertToRaid()
                             self.RaidDifficulty = instance.difficultyId
                             SetRaidDifficultyID(self.RaidDifficulty)
@@ -582,8 +582,10 @@ function LSY:GROUP_ROSTER_UPDATE()
             -- still waiting
         else
             -- rejected
-            self:DebugPrint("Player rejected")
+            self:SendMessage("Sorry, something went wrong - Please try sharing again!", 'CHECK')
+            self:DebugPrint("Player rejected or something went wrong")
             self:Release()
+            C_PartyInfo_ConfirmLeaveParty()
         end
     elseif self.status == STATUS_INVITED then
         if not IsInGroup() then

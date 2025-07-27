@@ -1,7 +1,7 @@
 local LSY, L, P, G = unpack((select(2, ...)))
 
 P.DBVer = 2
-P.Enable = true
+P.Enable = false
 P.Debug = false
 P.AutoExtend = true
 P.DNDMessage = false

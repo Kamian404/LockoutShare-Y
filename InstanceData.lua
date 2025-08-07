@@ -157,7 +157,7 @@ InstanceData = {
         factionSpecific = true,
     },
     BlackTemple = {
-        order = 6.1,
+        order = 6.01,
         displayName = "Black Temple",
         zoneId = {104},
         instanceId = 564,
@@ -166,7 +166,7 @@ InstanceData = {
         description = "Black Temple (normal) [Illidan Stormrage]",
     },
     LostInTheDeepDaily = {
-        order = 6.2,
+        order = 6.02,
         displayName = "Lost in the Deep Daily",
         zoneId = {207},
         instanceId = nil,
@@ -175,7 +175,7 @@ InstanceData = {
         description = "26710",
     },
     SiegeOfOrgrimmar = {
-        order = 6.3,
+        order = 6.03,
         displayName = "Siege of Orgrimmar",
         zoneId = {390, 1530},
         instanceId = 1136,
@@ -184,7 +184,7 @@ InstanceData = {
         description = "Siege of Orgrimmar, 10 (heroic) [Garrosh Hellscream] / (normal) [Kor'kron Dark Shaman]",
     },
     EmeraldNightmare = {
-        order = 6.4,
+        order = 6.04,
         displayName = "Emerald Nightmare",
         zoneId = {641},
         instanceId = 1520,
@@ -193,7 +193,7 @@ InstanceData = {
         description = "Emerald Nightmare (heroic) [Xavius]",
     },
     TheEternalPalace = {
-        order = 6.5,
+        order = 6.05,
         displayName = "The Eternal Palace",
         zoneId = {1355, 1528},
         instanceId = 2164,
@@ -202,7 +202,7 @@ InstanceData = {
         description = "The Eternal Palace (heroic) [Za'qul]",
     },
     CastleNathria = {
-        order = 6.6,
+        order = 6.06,
         displayName = "Castle Nathria",
         zoneId = {1525},
         instanceId = 2296,
@@ -211,7 +211,7 @@ InstanceData = {
         description = "Castle Nathria (normal/heroic) [Sire Denathrius]",
     },
     AberrusTheShadowedCrucible = {
-        order = 6.7,
+        order = 6.07,
         displayName = "Aberrus, the shadowed Crucible",
         zoneId = {2133},
         instanceId = 2569,
@@ -220,12 +220,21 @@ InstanceData = {
         description = "Aberrus, the Shadowed Crucible (normal/heroic) [Scalecommander Sarkareth]",
     },
     AmirdrassilTheDreamsHope = {
-        order = 6.8,
+        order = 6.08,
         displayName = "Amirdrassil, the Dream's Hope",
         zoneId = {2200},
         instanceId = 2549,
         category = "transmogsAndPets",
         difficultyId = 14,
         description = "Amirdrassil, the Dream's Hope (normal/heroic) [Fyrakk]",
+    },
+    ManaforgeOmega = {
+        order = 6.09,
+        displayName = "Manaforge Omega",
+        zoneId = {2371},
+        instanceId = 0,
+        category = "transmogsAndPets",
+        difficultyId = 14,
+        description = "Manaforge Omega (normal/heroic) [Dimensius]",
     }
 }

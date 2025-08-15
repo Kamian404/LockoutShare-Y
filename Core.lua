@@ -163,6 +163,7 @@ function LSY:TogglePause(pausedQueue)
 end
 
 function LSY:Initialize()
+    self:Release()
     self.status = STATUS_INIT
     self.queue = {}
 
@@ -171,7 +172,6 @@ function LSY:Initialize()
     end
 
     if self.db.Enable then
-        self:Release()
         LSY:CreateSharesFrame()
         LSY.sharesFrame:Show()
         self:RegisterEvent('UPDATE_INSTANCE_INFO')
@@ -497,12 +497,14 @@ function LSY:Release()
     self:UnregisterEvent('GROUP_INVITE_CONFIRMATION')
     self:UnregisterEvent('CHAT_MSG_PARTY_LEADER')
     self:UnregisterEvent('CHAT_MSG_RAID_LEADER')
-
-    if IsInGroup() then
-        if GetNumGroupMembers() > 1 then
-            PromoteToLeader('party1')
+    
+    if self.db.Enable then
+        if IsInGroup() then
+            if GetNumGroupMembers() > 1 then
+                PromoteToLeader('party1')
+            end
+            C_PartyInfo_ConfirmLeaveParty()
         end
-        C_PartyInfo_ConfirmLeaveParty()
     end
 
     self.sharinguser = ""

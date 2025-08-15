@@ -1,9 +1,11 @@
 local LSY, L, P, G = unpack((select(2, ...)))
+
 -- Lua functions
 _G["LSY"] = LSY
 local _G = _G
 local bit_band, bit_bor, format, gsub, ipairs, pairs, select = bit.band, bit.bor, format, gsub, ipairs, pairs, select
 local strfind, strlower, strmatch, tinsert, tonumber, tremove = strfind, strlower, strmatch, tinsert, tonumber, tremove
+
 
 -- WoW API / Variables
 local BNSendWhisper = BNSendWhisper
@@ -62,6 +64,9 @@ local STATUS_IDLE     = 1
 local STATUS_INVITING = 2
 local STATUS_INVITED  = 3
 local STATUS_LEAVING  = 4
+
+
+local ADDON_CHANNEL = "LockoutShareY"
 
 SLASH_LSY1 = "/lsy"
 
@@ -163,6 +168,8 @@ function LSY:TogglePause(pausedQueue)
 end
 
 function LSY:Initialize()
+    LSY:RegisterComm(ADDON_CHANNEL, "OnCommReceived")
+    JoinChannelByName(ADDON_CHANNEL, nil, nil, false)
     self:Release()
     self.status = STATUS_INIT
     self.queue = {}
@@ -497,7 +504,7 @@ function LSY:Release()
     self:UnregisterEvent('GROUP_INVITE_CONFIRMATION')
     self:UnregisterEvent('CHAT_MSG_PARTY_LEADER')
     self:UnregisterEvent('CHAT_MSG_RAID_LEADER')
-    
+
     if self.db.Enable then
         if IsInGroup() then
             if GetNumGroupMembers() > 1 then
@@ -930,6 +937,19 @@ function LSY:FindStringInHaystack(needle, haystack)
     return false
 end
 
+function LSY:OnCommReceived(prefix, message, distribution, sender)
+    if prefix ~= ADDON_CHANNEL then return end
+
+    if message == "PING" then
+        local chanId, _, _, _ = GetChannelName(ADDON_CHANNEL)
+        if chanId then
+            LSY:SendCommMessage(ADDON_CHANNEL, "PONG", "CHANNEL", tostring(chanId))
+        end
+    elseif message == "PONG" then
+        self.antworten[sender] = true
+    end
+end
+
 function LSY:HandleSlashCommand(msg)
     msg = msg:lower():trim()
 
@@ -940,6 +960,27 @@ function LSY:HandleSlashCommand(msg)
         end
         self.db.Enable = true
         LSY:Initialize()
+        return
+    end
+
+    if msg == "ping" then
+        self.antworten = {}
+        local chanId, _, _, _ = GetChannelName(ADDON_CHANNEL)
+        if chanId then
+            self:DebugPrint("Pinged other sharer")
+            LSY:SendCommMessage(ADDON_CHANNEL, "PING", "CHANNEL", tostring(chanId))
+        else
+            self:DebugPrint("Nicht im Channel: " .. ADDON_CHANNEL)
+            return
+        end
+
+        -- Nach 2 Sekunden Ergebnisse ausgeben
+        C_Timer.After(2, function()
+            self:DebugPrint("Other sharer:")
+            for spieler in pairs(self.antworten) do
+                self:DebugPrint(" - " .. spieler)
+            end
+        end)
         return
     end
 

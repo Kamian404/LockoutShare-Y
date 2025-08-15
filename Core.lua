@@ -163,7 +163,6 @@ function LSY:TogglePause(pausedQueue)
 end
 
 function LSY:Initialize()
-    self:Release()
     self.status = STATUS_INIT
     self.queue = {}
 
@@ -172,6 +171,7 @@ function LSY:Initialize()
     end
 
     if self.db.Enable then
+        self:Release()
         LSY:CreateSharesFrame()
         LSY.sharesFrame:Show()
         self:RegisterEvent('UPDATE_INSTANCE_INFO')

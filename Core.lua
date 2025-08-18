@@ -168,6 +168,11 @@ function LSY:TogglePause(pausedQueue)
 end
 
 function LSY:Initialize()
+    LSY:RegisterComm(ADDON_CHANNEL, "OnCommReceived")
+    
+    C_Timer.After(2, function()
+        JoinChannelByName(ADDON_CHANNEL, nil, nil, false)
+    end)
     self:Release()
     self.status = STATUS_INIT
     self.queue = {}
@@ -935,6 +940,19 @@ function LSY:FindStringInHaystack(needle, haystack)
     return false
 end
 
+function LSY:OnCommReceived(prefix, message, distribution, sender)
+    if prefix ~= ADDON_CHANNEL then return end
+
+    if message == "PING" then
+        local chanId, _, _, _ = GetChannelName(ADDON_CHANNEL)
+        if chanId then
+            LSY:SendCommMessage(ADDON_CHANNEL, "PONG", "CHANNEL", tostring(chanId))
+        end
+    elseif message == "PONG" then
+        self.antworten[sender] = true
+    end
+end
+
 function LSY:HandleSlashCommand(msg)
     msg = msg:lower():trim()
 
@@ -945,6 +963,27 @@ function LSY:HandleSlashCommand(msg)
         end
         self.db.Enable = true
         LSY:Initialize()
+        return
+    end
+
+    if msg == "ping" then
+        self.antworten = {}
+        local chanId, _, _, _ = GetChannelName(ADDON_CHANNEL)
+        if chanId then
+            self:DebugPrint("Pinged other sharer")
+            LSY:SendCommMessage(ADDON_CHANNEL, "PING", "CHANNEL", tostring(chanId))
+        else
+            self:DebugPrint("Nicht im Channel: " .. ADDON_CHANNEL)
+            return
+        end
+
+        -- Nach 2 Sekunden Ergebnisse ausgeben
+        C_Timer.After(2, function()
+            self:DebugPrint("Other sharer:")
+            for spieler in pairs(self.antworten) do
+                self:DebugPrint(" - " .. spieler)
+            end
+        end)
         return
     end
 

@@ -1,5 +1,5 @@
 local addon, Core = ...
-local LSY = LibStub('AceAddon-3.0'):NewAddon(addon, 'AceEvent-3.0', 'AceTimer-3.0', 'AceBucket-3.0', 'AceComm-3.0')
+local LSY = LibStub('AceAddon-3.0'):NewAddon(addon, 'AceEvent-3.0', 'AceTimer-3.0', 'AceBucket-3.0')
 
 -- Cache global Lua functions for performance
 local _G = _G

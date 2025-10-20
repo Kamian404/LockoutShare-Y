@@ -84,7 +84,7 @@ InstanceData = {
     LiberationOfUndermine = {
         order = 3.10,
         displayName = "Liberation of Undermine",
-        zoneId = {15347},
+        zoneId = {2346},
         instanceId = 2769,
         category = "raid",
         difficultyId = 14,
@@ -233,7 +233,7 @@ InstanceData = {
         displayName = "Manaforge Omega",
         zoneId = {2371},
         instanceId = 2810,
-        category = "transmogsAndPets",
+        category = "raid",
         difficultyId = 14,
         description = "Manaforge Omega (normal/heroic) [Dimensius]",
     }

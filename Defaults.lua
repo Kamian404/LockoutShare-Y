@@ -43,13 +43,15 @@ P.CommandsForVIP = ""
 P.CommandsBlacklist = "!poop"
 P.CommandsForLead = "!lead"
 P.CommandsForLeave = "+"
+P.CommandsForInfo = "!info"
+P.CommandsForQueue = "!queue, !q"
 P.TipMsg = L["COMMAND_TIP"]
 P.ZoneUnsupported = L["ZONE_UNSOPPORTED"]
 P.LeadMsgBeforeEntering = L["COMMAND_LEAD"]
 P.LeadMsgAfterEntering = L["HINT_LEAD"]
-P.CommandsForQueue = "!queue, !q"
 P.InQueueMessage = L["IN_QUEUE_MESSAGE"]
 P.NotInQueueMessage = L["NOT_IN_QUEUE_MESSAGE"]
+P.InfoMessage = L["COMMAND_INFO"]
 P.Blacklist = {}
 
 G.DebugLog = {

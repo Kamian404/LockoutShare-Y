@@ -368,6 +368,11 @@ LSY.Options.args.Commands = {
                 name = "Command for Tipping",
                 type = 'input',
             },
+            CommandsForInfo = {
+                order = 05.2,
+                name = "Command for Info",
+                type = 'input',
+            },
         description_general = {
             order = 09,
             name = "You can enter multiple commands by dividing with comma ','",
@@ -543,6 +548,12 @@ LSY.Options.args.Message = {
             NotInQueueMessage = {
                 order = 4.7,
                 name = "Message if the Player is not in queue",
+                type = 'input',
+                width = "full",
+            },
+            InfoMessage = {
+                order = 4.8,
+                name = "Message for the command !info",
                 type = 'input',
                 width = "full",
             },

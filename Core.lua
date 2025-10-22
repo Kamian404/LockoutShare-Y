@@ -681,8 +681,8 @@ function LSY:RecvChatMessage(text, playerName)
         return
     end
 
-    if string.upper(text) == "!INFO" then
-        self:SendMessage(L["COMMAND_INFO"], 'WHISPER', playerName)
+    if LSY:FindStringInHaystack(text, self.db.CommandsForInfo) then
+        self:SendMessage(self.db.InfoMessage, 'WHISPER', playerName)
     end
 
     if LSY:FindStringInHaystack(text, self.db.CommandsForQueue) then

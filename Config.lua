@@ -287,17 +287,24 @@ LSY.Options.args.Commands = {
             CommandsForVIP = {
                 order = 01.4,
                 name = "Commands for VIPs",
+                desc = "VIPs will be set in front of the Queue to be the next invited",
                 type = 'input',
             },
             VIPUnlimitedTime = {
                 order = 01.5,
                 name = "Unlimited time for VIPs",
+                desc = "This skips the auto leave timer for VIPs",
                 type = 'toggle',
             },
             CommandsBlacklist = {
                 order = 01.6,
                 name = "Blacklisted commands",
                 desc = "List of commands we dont want to accept",
+                type = 'input',
+            },
+            CommandsForQueue = {
+                order = 01.7,
+                name = "Commands for queue position ",
                 type = 'input',
             },
         header_lead_leave = {
@@ -348,6 +355,17 @@ LSY.Options.args.Commands = {
             CommandsForJourney = {
                 order = 04.2,
                 name = "Command for Journey",
+                type = 'input',
+            },
+        other_commands = {
+            order = 05,
+            type = "header",
+            width = "full",
+            name = "Other Commands",
+        },
+            CommandsForTipping = {
+                order = 05.1,
+                name = "Command for Tipping",
                 type = 'input',
             },
         description_general = {
@@ -507,6 +525,24 @@ LSY.Options.args.Message = {
             TipMsg = {
                 order = 4.6,
                 name = "Message for tips",
+                type = 'input',
+                width = "full",
+            },
+            ZoneUnsupported = {
+                order = 4.7,
+                name = "Message for unsupported Zone",
+                type = 'input',
+                width = "full",
+            },
+            InQueueMessage = {
+                order = 4.7,
+                name = "Message if the Player is in queue",
+                type = 'input',
+                width = "full",
+            },
+            NotInQueueMessage = {
+                order = 4.7,
+                name = "Message if the Player is not in queue",
                 type = 'input',
                 width = "full",
             },
@@ -678,7 +714,7 @@ LSY.Options.args.Informations = {
                 "|cffeda55f!lead |r- " .. "The Player get lead after entering the Dungeon/Raid. So they can invite friends or list in LFG - They can invite Friends before entering the Instance too." .. "\n" ..
                 "|cffeda55f+ |r- " .. "This command will free you." .. "\n" ..
                 "|cffeda55f!tip |r- " .. "This will print out your Name+Realm, if someone wants to tip you." .. "\n" ..
-                "|cffeda55f!info |r- " .. "This will just whispers the Info about the Autor." .. "\n"
+                "|cffeda55f!addon |r- " .. "This will just whispers the Info about the Autor." .. "\n"
         }
     }
 }

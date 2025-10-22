@@ -356,7 +356,7 @@ function LSY:CheckUserLocation()
     end
 
     -- If no valid instance was found for the current zone
-    self:SendMessage(L["ZONE_UNSOPPORTED"], 'CHECK')
+    self:SendMessage(self.db.ZoneUnsupported, 'CHECK')
     if userZoneId then
         self:DebugPrint("Unsupported Zone: " .. userZoneId)
     else 
@@ -662,6 +662,18 @@ function LSY:QueueQuery(name)
     return playerIndex
 end
 
+-- get index of a player from queue
+function LSY:QueueIndex(name)
+    self:DebugPrint("Index %s from queue", name)
+
+    local playerIndex = self:QueueQuery(name)
+    if playerIndex then
+        self:SendMessage(self.db.InQueueMessage, 'WHISPER', name, playerIndex)
+    else
+        self:SendMessage(self.db.NotInQueueMessage, 'WHISPER', name)
+    end
+end
+
 function LSY:RecvChatMessage(text, playerName)
     text = strlower(text)
     if text == '++' then
@@ -673,11 +685,15 @@ function LSY:RecvChatMessage(text, playerName)
         self:SendMessage(L["COMMAND_INFO"], 'WHISPER', playerName)
     end
 
+    if LSY:FindStringInHaystack(text, self.db.CommandsForQueue) then
+        self:QueueIndex(playerName)
+    end
+
     if string.upper(text) == "!ADDON" then
         self:SendMessage(L["ADDON_INFO"] .. C_AddOns.GetAddOnMetadata("LockoutShare-Y", "Version"), 'WHISPER', playerName)
     end
 
-    if string.upper(text) == "!TIP" then
+    if LSY:FindStringInHaystack(text, self.db.CommandsForTipping) then
         self:SendMessage(self.db.TipMsg, 'WHISPER', playerName)
     end
 

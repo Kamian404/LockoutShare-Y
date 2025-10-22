@@ -454,6 +454,18 @@ LSY.Options.args.Message = {
                 type = 'input',
                 width = "full",
             },
+            InQueueMessage = {
+                order = 02.4,
+                name = "Message if the Player is in queue",
+                type = 'input',
+                width = "full",
+            },
+            NotInQueueMessage = {
+                order = 02.5,
+                name = "Message if the Player is not in queue",
+                type = 'input',
+                width = "full",
+            },
         blank3 = {
             order = 02.9,
             type = "description",
@@ -536,18 +548,6 @@ LSY.Options.args.Message = {
             ZoneUnsupported = {
                 order = 4.7,
                 name = "Message for unsupported Zone",
-                type = 'input',
-                width = "full",
-            },
-            InQueueMessage = {
-                order = 4.7,
-                name = "Message if the Player is in queue",
-                type = 'input',
-                width = "full",
-            },
-            NotInQueueMessage = {
-                order = 4.7,
-                name = "Message if the Player is not in queue",
                 type = 'input',
                 width = "full",
             },

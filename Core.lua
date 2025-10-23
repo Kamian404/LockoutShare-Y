@@ -134,6 +134,7 @@ function LSY:SendMessage(text, chatType, channel, currIndex)
     text = gsub(text, 'SHARINGUSER', self.sharinguser)
     text = gsub(text, 'SUPINSTANCE', self.RaidForMsg)
     text = gsub(text, 'FACTIONSPECIFIC', self.playerfaction)
+    text = gsub(text, 'TOTALCOUNT', self.db.totalCount+1)
 
     if chatType == 'BNWHISPER' then
         return BNSendWhisper(channel, text)
@@ -627,7 +628,7 @@ function LSY:QueuePush(name)
     if not playerIndex then
         if self.VIPSharing then -- VIP will get share asap
             table.insert(self.queue, 1, name)
-            self:SendMessage(L["VIP_MESSAGE"], 'WHISPER', name)
+            self:SendMessage(self.db.VIPMessage, 'WHISPER', name)
         else
             tinsert(self.queue, name) -- Default for normal player
         end

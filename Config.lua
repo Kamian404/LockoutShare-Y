@@ -566,6 +566,7 @@ LSY.Options.args.Message = {
             "MTIME - Time Limit to wait players to enter instance." .. "\n" ..
             "SUPINSTANCE - The instance the player stands infront of (hopefully)" .. "\n" ..
             "SHARINGUSER - The name of the player." .. "\n" ..
+            "TOTALCOUNT - The total count of shares + 1." .. "\n" ..
             "NAME - The name and realm of your own character.",
             type = 'description',
         },

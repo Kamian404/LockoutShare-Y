@@ -215,22 +215,43 @@ LSY.Options.args.General = {
                 },
             },
         },
-        Blacklist = {
+        Fonts = {
             order = 50,
+            name = "Font",
+            type = 'group',
+            guiInline = true,
+            disabled = function() return not LSY.db.Enable or not LSY.db.AutoQueue end,
+            args = {
+                FontSizeWindow = {
+                    order = 51,
+                    name = "Font size",
+                    desc = "Adjusts the font size of the Lockout list window.",
+                    type = 'range',
+                    min = 0, max = 24, step = 1,
+                    get = function() return LSY.db.fontSize end,
+                    set = function(_, value)
+                        LSY.db.fontSize = value
+                        LSY:UpdateSharesFrame() -- neu zeichnen mit neuer Größe
+                    end,
+                }
+            },
+        },
+        Blacklist = {
+            order = 60,
             name = "Blacklist",
             type = 'group',
             guiInline = true,
             disabled = function() return not LSY.db.Enable end,
             args = {
                 Add = {
-                    order = 51,
+                    order = 61,
                     name = ADD,
                     type = 'input',
                     get = function() end,
                     set = function(_, value) LSY:QueuePop(value); tinsert(LSY.db.Blacklist, value) end,
                 },
                 List = {
-                    order = 52,
+                    order = 62,
                     name = IGNORE_LIST,
                     type = 'select',
                     get = function() return currentSelectBlacklist end,
@@ -244,7 +265,7 @@ LSY.Options.args.General = {
                     end,
                 },
                 Delete = {
-                    order = 53,
+                    order = 63,
                     name = DELETE,
                     type = 'execute',
                     func = function() tDeleteItem(LSY.db.Blacklist, currentSelectBlacklist); currentSelectBlacklist = nil end,

@@ -31,10 +31,10 @@ function LSY:CreateSharesFrame()
     frame.title:SetText("LockoutShare-Y")
 
     -- Total and Today (immer sichtbar)
-    frame.totalText = frame:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+    frame.totalText = self:CreateFont(frame, "GameFontNormal")
     frame.totalText:SetPoint("TOPLEFT", 15, -35)
 
-    frame.todayText = frame:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+    frame.todayText = self:CreateFont(frame, "GameFontNormal")
     frame.todayText:SetPoint("TOPRIGHT", -15, -35)
 
     -- Container für einklappbaren Content (ScrollFrame + Instanzliste)
@@ -57,14 +57,14 @@ function LSY:CreateSharesFrame()
     frame.entries = {}
 
     -- Last shared (immer sichtbar)
-    frame.lastSharedText = frame:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+    frame.lastSharedText = self:CreateFont(frame, "GameFontNormal")
     frame.lastSharedText:SetPoint("BOTTOMLEFT", 15, 30)
     frame.lastSharedText:SetWidth(290)              -- Platz für Text
     frame.lastSharedText:SetWordWrap(true)          -- Automatischer Umbruch
     frame.lastSharedText:SetJustifyH("LEFT")        -- Linksbündig
 
     -- Last shared (immer sichtbar)
-    frame.lastSharedToText = frame:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+    frame.lastSharedToText = self:CreateFont(frame, "GameFontNormal")
     frame.lastSharedToText:SetPoint("BOTTOMLEFT", 15, 15)
     frame.lastSharedToText:SetWidth(290)              -- Platz für Text
     frame.lastSharedToText:SetWordWrap(true)          -- Automatischer Umbruch
@@ -93,19 +93,36 @@ function LSY:CreateSharesFrame()
 
     toggleButton:SetScript("OnClick", function()
         if contentContainer:IsShown() then
+            -- Minimieren
             contentContainer:Hide()
             plusTex:Show()
             minusTex:Hide()
             frame:SetHeight(110)  -- Höhe für Titel + Total/Today + Last shared
+            LSY.db.sharesFrameCollapsed = true  -- <--- Zustand merken
         else
+            -- Aufklappen
             contentContainer:Show()
             plusTex:Hide()
             minusTex:Show()
             frame:SetHeight(420) -- volle Höhe mit Inhalt
+            LSY.db.sharesFrameCollapsed = false -- <--- Zustand merken
         end
     end)
 
     self.sharesFrame = frame
+
+        -- Zustand beim Laden wiederherstellen
+    if self.db.sharesFrameCollapsed then
+        contentContainer:Hide()
+        plusTex:Show()
+        minusTex:Hide()
+        frame:SetHeight(110)
+    else    
+        contentContainer:Show()
+        plusTex:Hide()
+        minusTex:Show()
+        frame:SetHeight(420)
+    end
 
     if ElvUI then
         local E = unpack(ElvUI)
@@ -124,6 +141,21 @@ function LSY:UpdateSharesFrame()
     local frame = self.sharesFrame
     if not frame then return end
 
+    local function ApplyFontSize(fontString)
+        if fontString and fontString.SetFont then
+            local font, _, flags = fontString:GetFont()
+            fontString:SetFont(font, LSY.db.fontSize, flags)
+        end
+    end
+
+    ApplyFontSize(frame.totalText)
+    ApplyFontSize(frame.todayText)
+    ApplyFontSize(frame.lastSharedText)
+    ApplyFontSize(frame.lastSharedToText)
+    for _, label in ipairs(frame.entries) do
+        ApplyFontSize(label)
+    end
+
     frame.totalText:SetText("Total: " .. (self.db.totalCount or 0))
     frame.todayText:SetText("Today: " .. (self.todayCount or 0))
     frame.lastSharedText:SetText("Last shared: " .. (self.lastShared or "-"))
@@ -139,7 +171,7 @@ function LSY:UpdateSharesFrame()
     -- Neue Lockouts anzeigen
     local yOffset = -5
     for i, text in ipairs(self.lockouts or {}) do
-        local label = frame.content:CreateFontString(nil, "OVERLAY", "GameFontHighlight")
+        local label = self:CreateFont(frame, "GameFontNormal")
         label:SetPoint("TOPLEFT", 0, yOffset)
         label:SetWidth(250)
         label:SetWordWrap(true)
@@ -152,4 +184,11 @@ function LSY:UpdateSharesFrame()
 
     -- Höhe des Content-Frames für Scrollbar setzen
     frame.content:SetHeight(math.max(#frame.entries * 18, 1))
+end
+
+function LSY:CreateFont(parent, template)
+    local fontString = parent:CreateFontString(nil, "OVERLAY", template or "GameFontNormal")
+    local font, _, flags = fontString:GetFont()
+    fontString:SetFont(font, self.db.fontSize, flags)
+    return fontString
 end

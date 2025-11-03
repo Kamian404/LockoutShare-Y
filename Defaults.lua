@@ -18,6 +18,7 @@ P.AutoLeave = true
 P.InviteTimeLimit = 10
 P.TimeExtraForLead = 10
 P.TimeLimit = 30
+P.fontSize = 12
 P.WhisperMessage = true
 P.BNWhisperMessage = false
 P.GroupMessage = true

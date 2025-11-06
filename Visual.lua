@@ -63,7 +63,7 @@ function LSY:CreateSharesFrame()
     frame.lastSharedText:SetWordWrap(true)          -- Automatischer Umbruch
     frame.lastSharedText:SetJustifyH("LEFT")        -- Linksbündig
 
-    -- Last shared (immer sichtbar)
+    -- Last shared to player (immer sichtbar)
     frame.lastSharedToText = self:CreateFont(frame, "GameFontNormal")
     frame.lastSharedToText:SetPoint("BOTTOMLEFT", 15, 15)
     frame.lastSharedToText:SetWidth(290)              -- Platz für Text
@@ -171,7 +171,7 @@ function LSY:UpdateSharesFrame()
     -- Neue Lockouts anzeigen
     local yOffset = -5
     for i, text in ipairs(self.lockouts or {}) do
-        local label = self:CreateFont(frame, "GameFontNormal")
+        local label = self:CreateFont(frame.content, "GameFontHighlight")
         label:SetPoint("TOPLEFT", 0, yOffset)
         label:SetWidth(250)
         label:SetWordWrap(true)

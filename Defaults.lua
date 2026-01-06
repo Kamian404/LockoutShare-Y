@@ -8,7 +8,6 @@ P.DNDMessage = false
 P.InviteOnWhisper = true
 P.InviteOnWhisperMsg = '!sharing'
 P.InviteOnBNWhisper = false
-P.InviteOnBNWhisperMsg = '!sharing'
 P.InviteOnInvited = false
 P.BlacklistMaliciousUser = true
 P.AutoQueue = true

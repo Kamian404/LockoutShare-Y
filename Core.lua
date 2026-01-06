@@ -798,21 +798,25 @@ do
             self.VIPSharing = false
             -- Standard Whisper-Command
             if LSY:FindStringInHaystack(text, self.db.InviteOnWhisperMsg) then
+                self:DebugPrint("Standard command was used", playerName)
                 self.QuestSharing = false
                 inviteTriggered = true
 
             -- Lost in the Deep aktiv?
             elseif self.db.LostInTheDeepDaily and LSY:FindStringInHaystack(text, self.db.CommandsForLost) then
+                self:DebugPrint("Lost command was used", playerName)
                 self.QuestSharing = true
                 inviteTriggered = true
 
             -- Journey aktiv?
             elseif self.db.JourneyToTheTimelessIsle and LSY:FindStringInHaystack(text, self.db.CommandsForJourney) then
+                self:DebugPrint("Journey command was used", playerName)
                 self.QuestSharing = true
                 inviteTriggered = true
 
             -- VIP Command for Guild, Friends, etc
             elseif LSY:FindStringInHaystack(text, self.db.CommandsForVIP) then
+                self:DebugPrint("VIP command was used", playerName)
                 self.QuestSharing = false
                 inviteTriggered = true
                 self.VIPSharing = true
@@ -823,8 +827,10 @@ do
         if inviteTriggered then
             self.whisperedCommand = text
             if not self.db.AutoQueue then
+                self:DebugPrint("Trying to invite %s", playerName)
                 self:Invite(playerName)
             else
+                self:DebugPrint("Queued %s", playerName)
                 self:QueuePush(playerName)
             end
         elseif self.db.LeaveQueueOnWhisper and text == self.db.LeaveQueueOnWhisperMsg then
@@ -839,22 +845,16 @@ end
 
 function LSY:CHAT_MSG_BN_WHISPER(_, text, playerName, _, _, _, _, _, _, _, _, _, _, presenceID)
     self:DebugPrint("Received Battle.net whisper '%s' from %s(%s)", text, playerName, presenceID)
-
-    if text ~= self.db.InviteOnBNWhisperMsg then return end
-
+    
     local accountInfo = C_BattleNet_GetAccountInfoByID(presenceID)
     local gameAccountInfo = accountInfo and accountInfo.gameAccountInfo
-    local characterName = gameAccountInfo and gameAccountInfo.characterName
-    local realmName = gameAccountInfo and gameAccountInfo.realmName
+    local characterName = gameAccountInfo and gameAccountInfo.characterName -- example: Yrna
+    local realmName = gameAccountInfo and gameAccountInfo.realmName -- example: Antonidas
     self:DebugPrint("Received character %s-%s", characterName or "UNKNOWN", realmName or "UNKNOWN")
 
     if characterName and characterName ~= '' and realmName and realmName ~= '' then
-        local sender = characterName .. '-' .. realmName
-        if not self.db.AutoQueue then
-            self:Invite(sender)
-        else
-            self:QueuePush(sender)
-        end
+        local sender = characterName .. '-' .. realmName -- example: Yrna-Antonidas
+        LSY:CHAT_MSG_WHISPER(_, text, sender)
     else
         self:SendMessage(self.db.FetchErrorMsg, 'BNWHISPER', presenceID)
     end

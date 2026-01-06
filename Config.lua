@@ -295,11 +295,6 @@ LSY.Options.args.Commands = {
                 name = "Command for Sharing",
                 type = 'input',
             },
-            InviteOnBNWhisperMsg = {
-                order = 01.2,
-                name = "Command for BNet Sharing",
-                type = 'input',
-            },
             LeaveQueueOnWhisperMsg = {
                 order = 01.3,
                 name = "Command to leave queue",

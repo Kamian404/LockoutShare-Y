@@ -1,9 +1,9 @@
-## Interface: 110207
+## Interface: 120001
 
 ## Title: Lockout Share Y
 ## Notes: Share your Lockout-IDs to others!
 ## Author: Kamian
-## Version: v1.1.27
+## Version: v1.1.28
 ## SavedVariables: LockoutShareYDB
 ## SavedVariablesPerCharacter: LSYConfig
 ## IconTexture: Interface\AddOns\LockoutShare-Y\Icon.png
